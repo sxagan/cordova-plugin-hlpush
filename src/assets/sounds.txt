@@ -1,0 +1,18 @@
+Incoming
+-- New Request - service-bell-ring (s01.mp3 {soundname:'/raw/s01'})
+-- New Invite - invite (s02.mp3 {soundname:'/raw/s02'})
+- New Reply - blop 1048 LN (s03.mp3 {soundname:'/raw/s03'})
+- Points added - coins (wait for anas to complete point system) NOTFOUND
+- Task Closed - done 1048 LN (s04.mp3 {soundname:'/raw/s04'})
+- Request accepted - accept (after 651 amnd after 672) (s05.mp3 {soundname:'/raw/s05'})
+- Request declined - no voice (after 651 amnd after 672) (s06.mp3 {soundname:'/raw/s06'})
++- New Group Request service-bell-ring (s01.mp3 {soundname:'/raw/s01'})
++- New Group Invite invite (s02.mp3 {soundname:'/raw/s02'})
++- New Channel Request service-bell-ring (s01.mp3 {soundname:'/raw/s01'})
++- New Channel Invite invite (s02.mp3 {soundname:'/raw/s02'})
+
+Outgoing
+- Task accepted - accept ?? 2728 (created) or 839 (sent) (s05.mp3 {soundname:'/raw/s05'})
+- Reply created - tick 2728 (s07.mp3 {soundname:'/raw/s07'})
+- Reply sent - blop 839 (s03.mp3 {soundname:'/raw/s03'})
+- New Post - service-bell-ring 716 (s01.mp3 {soundname:'/raw/s01'})
