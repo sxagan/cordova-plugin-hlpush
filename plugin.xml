@@ -135,13 +135,6 @@
         </config-file>
         
         <source-file src="src/assets/icon.png" target-dir="res/drawable" />
-        <source-file src="src/assets/s01.mp3" target-dir="res/raw" />
-        <source-file src="src/assets/s02.mp3" target-dir="res/raw" />
-        <source-file src="src/assets/s03.mp3" target-dir="res/raw" />
-        <source-file src="src/assets/s04.mp3" target-dir="res/raw" />
-        <source-file src="src/assets/s05.mp3" target-dir="res/raw" />
-        <source-file src="src/assets/s06.mp3" target-dir="res/raw" />
-        <source-file src="src/assets/s07.mp3" target-dir="res/raw" />
 
         <source-file
             src="src/android/LocalNotification.java"
