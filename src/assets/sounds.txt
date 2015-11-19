@@ -2,7 +2,7 @@ Incoming
 -- New Request - service-bell-ring (s01.mp3 {soundname:'/raw/s01'})
 -- New Invite - invite (s02.mp3 {soundname:'/raw/s02'})
 - New Reply - blop 1048 LN (s03.mp3 {soundname:'/raw/s03'})
-- Points added - coins (wait for anas to complete point system) NOTFOUND
+- Points added - coins (wait for anas to complete point system) NOTFOUND (s08.mp3 {soundname:'/raw/s08'})
 - Task Closed - done 1048 LN (s04.mp3 {soundname:'/raw/s04'})
 - Request accepted - accept (after 651 amnd after 672) (s05.mp3 {soundname:'/raw/s05'})
 - Request declined - no voice (after 651 amnd after 672) (s06.mp3 {soundname:'/raw/s06'})
