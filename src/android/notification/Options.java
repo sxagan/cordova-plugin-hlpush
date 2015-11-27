@@ -27,7 +27,9 @@ import android.app.AlarmManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -261,6 +263,18 @@ public class Options {
         return uri;
     }
 
+    public String getSoundName() {
+        String name = null;
+
+        try{
+            name = options.optString("soundname");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return name;
+    }
+
     /**
      * Icon bitmap for the local notification.
      */
@@ -282,7 +296,7 @@ public class Options {
      * Small icon resource ID for the local notification.
      */
     public int getSmallIcon () {
-        String icon = options.optString("smallIcon", "");
+        String icon = options.optString("smallIcon", "icon");
 
         int resId = assets.getResIdForDrawable(icon);
 

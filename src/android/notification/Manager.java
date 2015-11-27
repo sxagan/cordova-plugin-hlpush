@@ -26,7 +26,9 @@ package de.appplant.cordova.plugin.notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -116,15 +118,88 @@ public class Manager {
             return null;
 
         notification.cancel();
-
-        JSONObject options = mergeJSONObjects(
-                notification.getOptions().getDict(), updates);
+        
+        JSONObject options = mergeJSONObjects( notification.getOptions().getDict(), updates);
 
         try {
             options.putOpt("updatedAt", new Date().getTime());
         } catch (JSONException ignore) {}
 
         return schedule(options, receiver);
+    }
+
+    /*public Notification scheduleEx (JSONObject options, Class<?> receiver) {
+        return schedule(new Options(context).parse(options), receiver);
+    }
+    public Notification scheduleEx (Options options, Class<?> receiver) {
+        Notification notification = new Builder(options)
+                .setTriggerReceiver(receiver)
+                .buildEx();
+
+        notification.schedule();
+
+        return notification;
+    }*/
+    /**
+     * Clear local notification specified by ID.
+     *
+     * @param id
+     *      The notification ID
+     * @param appends
+     *      JSON object with notification options
+     * @param receiver
+     *      Receiver to handle the trigger event
+     */
+    public Notification append (int id, JSONObject appends, Class<?> receiver) {
+        Notification notification = get(id);
+
+        if (notification == null){
+            return schedule(appends, receiver);
+        }else{
+            JSONObject oldOptObj = notification.getOptions().getDict();
+            Options oldOptions = new Options(context).parse(oldOptObj);
+            String oldtext = oldOptions.getText();
+
+            Log.d("lNtfy-append", "insert to dataArray");
+            JSONArray dataArray;
+            if (oldOptObj.has("dataArray")) {
+                dataArray = oldOptObj.optJSONArray("dataArray");
+            }
+            else {
+                dataArray = new JSONArray();
+                dataArray.put(oldOptObj.opt("data"));
+            }
+
+            dataArray.put(appends.opt("data"));
+
+
+            try {
+                oldOptObj.putOpt("dataArray", dataArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            String newtext = appends.optString("text");
+            try {
+                appends.put("text", oldtext+"\r\n" + newtext);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JSONObject options = mergeJSONObjects( oldOptObj, appends);
+
+            try {
+                options.putOpt("updatedAt", new Date().getTime());
+            } catch (JSONException ignore) {}
+
+            notification.cancel();
+
+            return schedule(options, receiver);
+
+        }
+
+
     }
 
     /**

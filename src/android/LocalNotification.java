@@ -71,7 +71,7 @@ public class LocalNotification extends CordovaPlugin {
 
     // Queues all events before deviceready
     private static ArrayList<String> eventQueue = new ArrayList<String>();
-
+    private static String TAG = "lNtfy";
     /**
      * Called after plugin construction and fields have been initialized.
      * Prefer to use pluginInitialize instead since there is no value in
@@ -85,26 +85,44 @@ public class LocalNotification extends CordovaPlugin {
         //LocalNotification.cordova = cordova;
         /*if(webView != null){
             String webUrl = webView.getUrl();
-            Log.d("localNotification","initializing - "+ webUrl);
+            Log.d("lNtfy","initializing - "+ webUrl);
         }*/
-        if(this.webView == null){
-            Log.d("localNotification","initialize - referencing instance webView");
-            this.webView = webView;
+
+        try {
+            if(this.webView == null){
+                Log.d("lNtfy","initialize - referencing instance webView");
+                this.webView = webView;
+            }
+        } catch(Exception e) {
+            //throw e;
+            Log.e("lNtfy","initialize - referencing instance webView, thrown exception "+ e);
+
         }
-        if(this.cordova == null){
-            Log.d("localNotification","initialize - referencing instance cordova");
-            this.cordova = cordova;
+        try {
+            if(this.cordova == null){
+                Log.d("lNtfy","initialize - referencing instance cordova");
+                this.cordova = cordova;
+            }
+        } catch(Exception e) {
+            //throw e;
+            Log.e("lNtfy","initialize - referencing instance cordova, thrown exception "+ e);
+
         }
+
         /*if(LocalNotification.webView == null){
-            Log.d("localNotification","initialize - referencing static webView");
+            Log.d("lNtfy","initialize - referencing static webView");
             LocalNotification.webView = webView;
         }
         if(LocalNotification.cordova == null){
-            Log.d("localNotification","initialize - referencing static cordova");
+            Log.d("lNtfy","initialize - referencing static cordova");
             LocalNotification.cordova = cordova;
         }*/
         //super.initialize(cordova, webView);
-        registerWebView(webView);
+
+        //temp nonappgyver
+        if(webView != null){
+            registerWebView(webView);
+        }
 
     }
 
@@ -164,23 +182,25 @@ public class LocalNotification extends CordovaPlugin {
     @Override
     public boolean execute (final String action, final JSONArray args,
                             final CallbackContext command) throws JSONException {
-        Log.d("localNotification","execute - @Override method");
+        Log.d("lNtfy","execute - @Override method");
         //LocalNotification.webView = super.webView;
         //LocalNotification.cordova = super.cordova;
         registerWebView(webView);
-        Log.e("localNotification","execute - mWebViewReferences size: "+ mWebViewReferences.size());
+        Log.e("lNtfy","execute - mWebViewReferences size: "+ mWebViewReferences.size());
+
         Notification.setDefaultTriggerReceiver(TriggerReceiver.class);
         if (cordova == null) {
-            Log.e("localNotification","execute - instance cordova is null");
+            Log.e("lNtfy","execute - instance cordova is null");
             //throw new Error("execute => cordova is null");
         }
+
         ExecutorService tp = cordova.getThreadPool();
         if (tp == null) {
-            Log.e("localNotification","execute - cordova.getThreadPool() is null");
+            Log.e("lNtfy","execute - cordova.getThreadPool() is null");
             //throw new Error("execute => cordova.getThreadPool() returned null");
         }
         if (command == null) {
-            Log.e("localNotification","execute - CallbackContext is null");
+            Log.e("lNtfy","execute - CallbackContext is null");
             //throw new Error("execute => command is null");
         }
         tp.execute(new Runnable() {
@@ -191,6 +211,11 @@ public class LocalNotification extends CordovaPlugin {
                 }
                 else if (action.equals("update")) {
                     update(args);
+                    command.success();
+                }
+                else if (action.equals("append")) {
+                    ///LOG.d("append","appended");
+                    append(args);
                     command.success();
                 }
                 else if (action.equals("cancel")) {
@@ -249,13 +274,13 @@ public class LocalNotification extends CordovaPlugin {
                     deviceready();
                 }
                 else if (action.equals("_init")) {
-                    Log.d("localNotification","_init execute");
+                    Log.d("lNtfy","_init execute");
                     if(webView != null){
-                        Log.d("localNotification","initialize - referencing static webView");
+                        Log.d("lNtfy","initialize - referencing static webView");
                         LocalNotification.webView = webView;
                     }
                     if(cordova != null){
-                        Log.d("localNotification","initialize - referencing static cordova");
+                        Log.d("lNtfy","initialize - referencing static cordova");
                         LocalNotification.cordova = cordova;
                     }
                     //JSONObject jb = new JSONObject("{\"ok\": true }");
@@ -275,7 +300,7 @@ public class LocalNotification extends CordovaPlugin {
      *      Properties for each local notification
      */
     private void schedule (JSONArray notifications) {
-        Log.d("localNotification","schedule - scheduling notifications " + notifications);
+        Log.d("lNtfy","schedule - scheduling notifications " + notifications);
         for (int i = 0; i < notifications.length(); i++) {
             JSONObject options = notifications.optJSONObject(i);
 
@@ -301,6 +326,33 @@ public class LocalNotification extends CordovaPlugin {
                     getNotificationMgr().update(id, update, TriggerReceiver.class);
 
             fireEvent("update", notification);
+        }
+    }
+
+    /**
+     * Append multiple local notifications.
+     *
+     * @param appends
+     *      Notification properties including their IDs
+     */
+    private void append (JSONArray appends) {
+        for (int i = 0; i < appends.length(); i++) {
+            JSONObject append = appends.optJSONObject(i);
+            int id = append.optInt("id", 0);
+            if(id == 0)
+            {
+                id = 1;
+                try {
+                    append.putOpt("id",1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Notification notification =
+                    getNotificationMgr().append(id, append, TriggerReceiver.class);
+
+            fireEvent("append", notification);
         }
     }
 
@@ -587,7 +639,7 @@ public class LocalNotification extends CordovaPlugin {
      *      The event name
      */
     private void fireEvent (String event) {
-        Log.d("localNotification","fireEvent - instance method");
+        Log.d("lNtfy","fireEvent - instance method");
         fireEvent(event, null);
     }
 
@@ -602,7 +654,7 @@ public class LocalNotification extends CordovaPlugin {
     
 
     static void fireEvent (String event, Notification notification) {
-        Log.d("localNotification","fireEvent - static regular method");
+        Log.d("lNtfy","fireEvent - static regular method");
         String state = getApplicationState();
         String params = "\"" + state + "\"";
 
@@ -638,22 +690,28 @@ public class LocalNotification extends CordovaPlugin {
                 webViewReference = item;
                 break;
             }*/
+
         }
         return webViewReference;
     }
     private static WebViewReference createWebViewReference(CordovaWebView webView) {
-        String url = webView.getUrl();
-        Log.d("localNotification","createWebViewReference - creating view reference - "+ url);
-        Log.d("localNotification","createWebViewReference - webView.toString() - "+ webView.toString());
+        try{
+            String url = webView.getUrl();
+            Log.d("lNtfy","createWebViewReference - creating view reference - "+ url);
+            Log.d("lNtfy","createWebViewReference - webView.toString() - "+ webView.toString());
+
+        }catch(Exception e){
+            Log.e("lNtfy","createWebViewReference - creating view reference - thrown error"+ e);
+        }
         WebViewReference webViewReference = new WebViewReference(webView);
         mWebViewReferences.add(webViewReference);
         return webViewReference;
     }
 
     private static void sendJavascriptToAllWebViews(final String js) {
-        Log.d("localNotification","sendJavascriptToAllWebViews - WebView list size - "+ mWebViewReferences.size());
+        Log.d("lNtfy","sendJavascriptToAllWebViews - WebView list size - "+ mWebViewReferences.size());
         for (WebViewReference webViewReference : mWebViewReferences) {
-            Log.d("localNotification","sendJavascriptToAllWebViews - Running sendJavascript on webview - "+ webViewReference.toString());
+            Log.d("lNtfy","sendJavascriptToAllWebViews - Running sendJavascript on webview - "+ webViewReference.toString());
             sendJavascript(js, webViewReference.getWebView());
         }
     }
@@ -665,9 +723,9 @@ public class LocalNotification extends CordovaPlugin {
      *       JS code snippet as string
      */
     private static synchronized void sendJavascript(final String js, final CordovaWebView wv) {
-        Log.d("localNotification","sendJavascript - regular method");
+        Log.d("lNtfy","sendJavascript - regular method");
         if (!deviceready) {
-            Log.d("localNotification","sendJavascript - device not ready");
+            Log.d("lNtfy","sendJavascript - device not ready");
             eventQueue.add(js);
             return;
         }
@@ -682,34 +740,34 @@ public class LocalNotification extends CordovaPlugin {
             try {
                 //Method post = webView.getClass().getMethod("post",Runnable.class);
                 Method post = ((View)wv).getClass().getMethod("post",Runnable.class);
-                Log.d("localNotification","sendJavascript(ori) - post available ");
-                Log.d("localNotification","sendJavascript(ori) - js "+ js);
+                Log.d("lNtfy","sendJavascript(ori) - post available ");
+                Log.d("lNtfy","sendJavascript(ori) - js "+ js);
                 post.invoke(wv,jsLoader);
-                Log.d("localNotification","sendJavascript(ori) - post invoked ");
+                Log.d("lNtfy","sendJavascript(ori) - post invoked ");
 
                 //Activity wvContext =  (Activity) webView.getContext();
             } catch(Exception e) {
                 //throw e;
-                Log.e("localNotification","sendJavascript(ori) - post not available, thrown exception "+ e);
+                Log.e("lNtfy","sendJavascript(ori) - post not available, thrown exception "+ e);
                 //((Activity)(webView.getContext())).runOnUiThread(jsLoader);
                 Activity cActivity =  (Activity) cordova.getActivity();
                 if(cActivity != null){
-                    Log.d("localNotification","sendJavascript(ori) - cActivity => is not null ");
+                    Log.d("lNtfy","sendJavascript(ori) - cActivity => is not null ");
                     cActivity.runOnUiThread(jsLoader);
                 }
                
                 ///LocalNotification.cordova.getActivity().runOnUiThread(jsLoader);
             }            
         }else{
-            Log.e("localNotification","sendJavascript(ori) - static webView is null");
+            Log.e("lNtfy","sendJavascript(ori) - static webView is null");
         }
 
     }
 
     private static synchronized void sendJavascript(final String js) {
-        Log.d("localNotification","sendJavascript - regular method");
+        Log.d("lNtfy","sendJavascript - regular method");
         if (!deviceready) {
-            Log.d("localNotification","sendJavascript - device not ready");
+            Log.d("lNtfy","sendJavascript - device not ready");
             eventQueue.add(js);
             return;
         }
@@ -723,23 +781,23 @@ public class LocalNotification extends CordovaPlugin {
             try{
                 Activity cActivity =  (Activity) cordova.getActivity();
                 if(cActivity == null){
-                    Log.d("localNotification","sendJavascript(ori) - cActivity => is null ");
+                    Log.d("lNtfy","sendJavascript(ori) - cActivity => is null ");
                 }else{
-                    Log.d("localNotification","sendJavascript(ori) - cActivity => is not null ");
+                    Log.d("lNtfy","sendJavascript(ori) - cActivity => is not null ");
                     WebView currFocus = (WebView)cActivity.getCurrentFocus();
                     String wvUrl =  currFocus.getUrl();
 
                     ViewGroup viewgroup = (ViewGroup)((View)currFocus);
                     if(viewgroup != null){
-                        Log.d("localNotification","sendJavascript(ori) - viewgroup => viewgroup.getChildCount() " + viewgroup.getChildCount());
+                        Log.d("lNtfy","sendJavascript(ori) - viewgroup => viewgroup.getChildCount() " + viewgroup.getChildCount());
                     }
 
-                    ArrayList<View> views = ((View)currFocus).getFocusables(1);
+                    ArrayList<View> views = ((View)currFocus).getFocusables(View.FOCUS_FORWARD);
                     if(views != null){
-                        Log.d("localNotification","sendJavascript(ori) - ((View)currFocus).getFocusables(1) views.size() : " + views.size());
+                        Log.d("lNtfy","sendJavascript(ori) - ((View)currFocus).getFocusables(1) views.size() : " + views.size());
                     }
 
-                    Log.d("localNotification","sendJavascript(ori) - currFocus url "+ wvUrl);
+                    Log.d("lNtfy","sendJavascript(ori) - currFocus url "+ wvUrl);
                     cActivity.runOnUiThread(jsLoader);
                 }
                 /*ViewGroup viewgroup = (ViewGroup)((View)webView);
@@ -771,25 +829,25 @@ public class LocalNotification extends CordovaPlugin {
                     Log.d("localNotification","sendJavascript(ori) - cActivity is null");
                 }*/
             }catch(Exception e){
-                Log.e("localNotification","sendJavascript(ori) - try getview, thrown exception ");
+                Log.e("lNtfy","sendJavascript(ori) - try getview, thrown exception ");
             }
 
             try {
                 //Method post = webView.getClass().getMethod("post",Runnable.class);
                 Method post = ((View)webView).getClass().getMethod("post",Runnable.class);
-                Log.d("localNotification","sendJavascript(ori) - post available ");
-                Log.d("localNotification","sendJavascript(ori) - js "+ js);
+                Log.d("lNtfy","sendJavascript(ori) - post available ");
+                Log.d("lNtfy","sendJavascript(ori) - js "+ js);
                 post.invoke(webView,jsLoader);
-                Log.d("localNotification","sendJavascript(ori) - post invoked ");
+                Log.d("lNtfy","sendJavascript(ori) - post invoked ");
 
                 //Activity wvContext =  (Activity) webView.getContext();
             } catch(Exception e) {
                 //throw e;
-                Log.e("localNotification","sendJavascript(ori) - post not available, thrown exception "+ e);
+                Log.e("lNtfy","sendJavascript(ori) - post not available, thrown exception "+ e);
                 //((Activity)(webView.getContext())).runOnUiThread(jsLoader);
                 Activity cActivity =  (Activity) cordova.getActivity();
                 if(cActivity != null){
-                    Log.d("localNotification","sendJavascript(ori) - cActivity => is not null ");
+                    Log.d("lNtfy","sendJavascript(ori) - cActivity => is not null ");
                     cActivity.runOnUiThread(jsLoader);
                 }
                 /*Activity wvContext =  (Activity) webView.getContext();
@@ -802,7 +860,7 @@ public class LocalNotification extends CordovaPlugin {
                 ///LocalNotification.cordova.getActivity().runOnUiThread(jsLoader);
             }            
         }else{
-            Log.e("localNotification","sendJavascript(ori) - static webView is null");
+            Log.e("lNtfy","sendJavascript(ori) - static webView is null");
         }
 
     }

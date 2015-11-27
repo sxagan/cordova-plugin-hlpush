@@ -117,6 +117,9 @@ class AssetUtil {
 		} else if (path.startsWith("http")){
 			return getUriFromRemote(path);
 		}
+		/*else if (path.startsWith("android.resource")){
+			return Uri.parse(path);
+		}*/
 
 		return Uri.EMPTY;
 	}

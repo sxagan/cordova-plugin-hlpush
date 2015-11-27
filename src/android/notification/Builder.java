@@ -26,9 +26,14 @@ package de.appplant.cordova.plugin.notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Random;
@@ -114,20 +119,27 @@ public class Builder {
     /**
      * Creates the notification with all its options passed through JS.
      */
-    public Notification build() {
+    public Notification buildEx() {
         Uri sound = options.getSoundUri();
         NotificationCompat.BigTextStyle style;
         NotificationCompat.Builder builder;
 
+        String summary = options.getText();
+        if(summary.length() > 50){
+            summary = summary.substring(0,20);
+        }
         style = new NotificationCompat.BigTextStyle()
-                .bigText(options.getText());
+                .bigText(options.getText()).setBigContentTitle(options.getTitle());
+
 
         builder = new NotificationCompat.Builder(context)
                 .setDefaults(0)
                 .setContentTitle(options.getTitle())
-                .setContentText(options.getText())
+                //.setContentText(options.getText())
+                .setContentText(summary)
                 .setNumber(options.getBadgeNumber())
-                .setTicker(options.getText())
+                //.setTicker(options.getText())
+                .setTicker(summary)
                 .setSmallIcon(options.getSmallIcon())
                 .setLargeIcon(options.getIconBitmap())
                 .setAutoCancel(options.isAutoClear())
@@ -135,8 +147,163 @@ public class Builder {
                 .setStyle(style)
                 .setLights(options.getLedColor(), 500, 500);
 
-        if (sound != null) {
+        /*Intent view2 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+        PendingIntent piview2 = PendingIntent.getService(this.context, 0, view2, 0);
+        Intent view3 = new Intent(this.context, ClickActivity.class);//de.appplant.cordova.plugin.localnotification.
+        view3.putExtra("Value1", "This value one for ActivityTwo");
+        view3.putExtra("Value2", "This value two ActivityTwo");
+        PendingIntent piview3 = PendingIntent.getService(this.context, 0, view3, 0);
+
+        builder.addAction(this.context.getResources().getIdentifier("icon", "drawable", this.context.getPackageName()), "Click", piview3)
+                .addAction(this.context.getResources().getIdentifier("icon", "drawable", this.context.getPackageName()), "View", piview2);*/
+
+        /*if (sound != null) {
             builder.setSound(sound);
+        }*/
+        String soundname = options.getSoundName();
+        if (soundname != null) {
+            String pkg = this.context.getPackageName();
+            //int resId = this.context.getResources().getIdentifier(soundname, "raw", this.context.getPackageName());
+            //Uri s = Uri.parse("android.resource://" + pkg + "/" + resId);
+
+            //Uri s = Uri.parse("android.resource://"+pkg+"/raw/s1");
+            Uri s = Uri.parse("android.resource://"+pkg+soundname);
+            //Uri s = Uri.parse("res://" + R.raw.s1);
+            //builder.setSound(sound);
+            //this.context.getResources().getIdentifier("s1", "raw", this.context.getPackageName())
+            builder.setSound(s);
+            //builder.setSound(Uri.parse("android.resource://de.appplant.localnotification.example/s1"));
+        }
+
+        applyDeleteReceiver(builder);
+        applyContentReceiver(builder);
+
+        return new Notification(context, options, builder, triggerReceiver);
+    }
+
+    public Notification build() {
+        Uri sound = options.getSoundUri();
+        NotificationCompat.BigTextStyle style;
+        NotificationCompat.Builder builder;
+
+        /*String summary = options.getText();
+        if(summary.length() > 50){
+            summary = summary.substring(0,20);
+        }*/
+        JSONObject optionsjson = options.getDict();
+        JSONArray dataArray = optionsjson.optJSONArray("dataArray");
+
+        String BTS_BigText = "BigTextStyle-BigText",BTS_BigTitle ="BigTextStyle-BigTitle",BTS_SummaryText="SummaryText";
+        String ContentTitle="ContentTitle",ContentText="ContentText",Ticker="Ticker";
+        int SmallIcon,LedColor;
+        Bitmap IconBitmap = options.getIconBitmap();
+        boolean isAutoClear = true;
+        int badge = 0;
+        LedColor = options.getLedColor();
+        SmallIcon = options.getSmallIcon();
+        IconBitmap = options.getIconBitmap();
+        isAutoClear = options.isAutoClear();
+        if(dataArray != null){
+            badge = dataArray.length();
+        }
+        if(badge > 1){
+            try {
+                JSONObject dat = new JSONObject(optionsjson.optString("data"));
+                BTS_BigTitle = "HotLine";
+                String msg = "";
+                for(int i = 0 ; i < dataArray.length(); i++){
+                    JSONObject obj = new JSONObject(dataArray.getString(i));
+                    if(msg.length() > 0){
+                        msg = msg + "\r\n";
+                    }
+                    String addMSg = obj.optString("msg");
+                    if(addMSg.length() > 32){
+                        addMSg = addMSg.substring(0,30) + " ...";
+                    }
+                    msg = msg + obj.optString("sender") + ": "+ addMSg;
+                }
+                BTS_BigText = msg;
+                BTS_SummaryText = String.format("%1d new messages", badge);
+                ContentTitle = BTS_BigTitle;
+                ContentText = BTS_SummaryText;
+                Ticker = BTS_SummaryText;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("lNtfy", "Error parsing JSONObject 1");
+            }
+
+        }else{
+            try {
+                JSONObject dat = new JSONObject(optionsjson.optString("data"));
+                BTS_BigTitle = dat.getString("sender");
+                String msg = dat.getString("msg");
+                /*if(msg.length() > 45){
+                    msg = msg.substring(0,42) + " ...";
+                }*/
+                BTS_BigText = msg;
+                BTS_SummaryText = String.format("New message in %1s post", dat.getString("posttitle"));
+                ContentTitle = BTS_BigTitle;
+                ContentText = BTS_BigText;
+                Ticker = BTS_SummaryText;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("lNtfy", "Error parsing JSONObject 2");
+            }
+
+        }
+
+        style = new NotificationCompat.BigTextStyle()
+                //.bigText(options.getText()).setBigContentTitle(options.getTitle());
+                .bigText(BTS_BigText).setBigContentTitle(BTS_BigTitle).setSummaryText(BTS_SummaryText);
+
+
+        builder = new NotificationCompat.Builder(context)
+                .setDefaults(0)
+                //.setContentTitle(options.getTitle())
+                .setContentTitle(ContentTitle)
+                .setContentText(ContentText)
+                        //.setContentText(options.getText())
+                //.setContentText(summary)
+                //.setNumber(options.getBadgeNumber())
+                .setNumber(badge)
+                .setColor(Color.YELLOW)
+                        //.setTicker(options.getText())
+                //.setTicker(summary)
+                .setTicker(Ticker)
+                .setSmallIcon(SmallIcon)
+                .setLargeIcon(IconBitmap)
+                .setAutoCancel(isAutoClear)
+                .setOngoing(false)
+                .setStyle(style)
+                .setLights(LedColor, 500, 500);
+
+        /*Intent view2 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+        PendingIntent piview2 = PendingIntent.getService(this.context, 0, view2, 0);
+        Intent view3 = new Intent(this.context, ClickActivity.class);//de.appplant.cordova.plugin.localnotification.
+        view3.putExtra("Value1", "This value one for ActivityTwo");
+        view3.putExtra("Value2", "This value two ActivityTwo");
+        PendingIntent piview3 = PendingIntent.getService(this.context, 0, view3, 0);
+
+        builder.addAction(this.context.getResources().getIdentifier("icon", "drawable", this.context.getPackageName()), "Click", piview3)
+                .addAction(this.context.getResources().getIdentifier("icon", "drawable", this.context.getPackageName()), "View", piview2);*/
+
+        /*if (sound != null) {
+            builder.setSound(sound);
+        }*/
+        String soundname = options.getSoundName();
+        if (soundname != null) {
+            String pkg = this.context.getPackageName();
+            //int resId = this.context.getResources().getIdentifier(soundname, "raw", this.context.getPackageName());
+            //Uri s = Uri.parse("android.resource://" + pkg + "/" + resId);
+
+            //Uri s = Uri.parse("android.resource://"+pkg+"/raw/s1");
+            Uri s = Uri.parse("android.resource://"+pkg+soundname);
+            //Uri s = Uri.parse("res://" + R.raw.s1);
+            //builder.setSound(sound);
+            //this.context.getResources().getIdentifier("s1", "raw", this.context.getPackageName())
+            builder.setSound(s);
+            //builder.setSound(Uri.parse("android.resource://de.appplant.localnotification.example/s1"));
         }
 
         applyDeleteReceiver(builder);

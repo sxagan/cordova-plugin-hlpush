@@ -108,6 +108,28 @@ exports.update = function (opts, callback, scope) {
 };
 
 /**
+ * Append existing notifications specified by IDs in options.
+ *
+ * @param {Object} options
+ *      The notification properties to append
+ * @param {Function} callback
+ *      A function to be called after the notification has been appended
+ * @param {Object?} scope
+ *      The scope for the callback function
+ */
+exports.append = function (opts, callback, scope) {
+    var notifications = Array.isArray(opts) ? opts : [opts];
+
+    for (var i = 0; i < notifications.length; i++) {
+        var properties = notifications[i];
+
+        this.convertProperties(properties);
+    }
+
+    this.exec('append', notifications, callback, scope);
+};
+
+/**
  * Clear the specified notification.
  *
  * @param {String} id
