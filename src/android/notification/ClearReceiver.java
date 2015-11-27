@@ -38,7 +38,9 @@ public class ClearReceiver extends AbstractClearReceiver {
      */
     @Override
     public void onClear (Notification notification) {
+
         notification.clear();
+        notification.cancel();
     }
 
 }
