@@ -142,7 +142,8 @@ public class Builder {
                 .setTicker(summary)
                 .setSmallIcon(options.getSmallIcon())
                 .setLargeIcon(options.getIconBitmap())
-                .setAutoCancel(options.isAutoClear())
+                //.setAutoCancel(options.isAutoClear())
+                .setAutoCancel(true)
                 .setOngoing(options.isOngoing())
                 .setStyle(style)
                 .setLights(options.getLedColor(), 500, 500);

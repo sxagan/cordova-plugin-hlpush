@@ -88,7 +88,19 @@ exports.update = function (opts, callback, scope) {
  *      The scope for the callback function
  */
 exports.append = function (opts, callback, scope) {
-    this.core.append(opts, callback, scope);
+    var def = {
+        id: 1,
+        title: '',
+        text: '',
+    }
+    if(window.device.platform == "Android"){
+        this.core.append(opts, callback, scope);
+    }else{
+        _.merge(def,opts);
+        def.title = opts.data.posttitle;
+        def.text = opts.data.msg;
+        this.core.schedule(def, callback, scope);
+    }
 };
 
 /**

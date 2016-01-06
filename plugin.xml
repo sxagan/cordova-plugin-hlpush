@@ -79,14 +79,14 @@
         <source-file src="src/ios/UILocalNotification+APPLocalNotification.m" />
 
         <!-- pushnotification -->
-        <header-file src="src/ios/AppDelegate+notification.h" />
-        <source-file src="src/ios/AppDelegate+notification.m" />
+        <header-file src="src/ios/push/AppDelegate+notification.h" />
+        <source-file src="src/ios/push/AppDelegate+notification.m" />
 
-        <header-file src="src/ios/NotificationService.h" />
-        <source-file src="src/ios/NotificationService.m" />
+        <header-file src="src/ios/push/NotificationService.h" />
+        <source-file src="src/ios/push/NotificationService.m" />
 
-        <header-file src="src/ios/PushPlugin.h" />
-        <source-file src="src/ios/PushPlugin.m" />
+        <header-file src="src/ios/push/PushPlugin.h" />
+        <source-file src="src/ios/push/PushPlugin.m" />
 
         <!-- local notification hooks-->
         <hook
