@@ -17,8 +17,8 @@ import org.json.JSONObject;
 
 import java.util.Set;
 
-import de.appplant.cordova.plugin.localnotification.TriggerReceiver;
-import de.appplant.cordova.plugin.notification.Manager;
+import com.datum.hotline.plugin.hlpush.localnotification.TriggerReceiver;
+import com.datum.hotline.plugin.hlpush.notification.Manager;
 
 @SuppressLint("NewApi")
 public class GCMIntentService extends GCMBaseIntentService {
