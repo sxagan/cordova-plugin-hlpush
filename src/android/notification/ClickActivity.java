@@ -21,7 +21,7 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
-package de.appplant.cordova.plugin.notification;
+package com.datum.hotline.plugin.hlpush.notification;
 
 /**
  * The receiver activity is triggered when a notification is clicked by a user.

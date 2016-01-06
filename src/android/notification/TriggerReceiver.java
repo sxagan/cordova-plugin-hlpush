@@ -21,7 +21,7 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
-package de.appplant.cordova.plugin.notification;
+package com.datum.hotline.plugin.hlpush.notification;
 
 /**
  * The alarm receiver is triggered when a scheduled alarm is fired. This class

@@ -40,7 +40,7 @@ public class PushPlugin extends CordovaPlugin {
 
   private void readSenderIdFromCordovaConfig() {
     Bundle extras = cordova.getActivity().getIntent().getExtras();
-    if(extras.containsKey(GCM_SENDER_ID)) {
+    if(extras != null && extras.containsKey(GCM_SENDER_ID)) {
       String senderID = extras.getString(GCM_SENDER_ID);
       NotificationService
       .getInstance(getApplicationContext())

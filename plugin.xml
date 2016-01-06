@@ -2,14 +2,14 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        id="de.appplant.cordova.plugin.local-notification"
-        version="0.8.5-agdev">
+        id="com.datum.hotline.plugin.hlpush"
+        version="1.0.0-agdev">
 
-    <name>LocalNotification</name>
+    <name>HLPush</name>
 
     <description>The plugin supports scheduling local notifications in various ways with a single interface. It also allows you to update, clear or cancel them. There are different interfaces to query for local notifications and a complete set of events to hook into the life cycle of local notifications. To get a deep overview we recommend to read about all the topics in our wiki and try out the Kitchen Sink App</description>
 
-    <repo>https://github.com/katzer/cordova-plugin-local-notifications.git</repo>
+    <repo>https://github.com/sxagan/cordova-plugin-hlpush</repo>
 
     <keywords>appplant, notification, local notification</keywords>
 
@@ -61,6 +61,9 @@
                 <param name="ios-package" value="APPLocalNotification" onload="true" />
                 <param name="onload" value="true" />
             </feature>
+            <feature name="PushPlugin">
+                <param name="ios-package" value="PushPlugin"/>
+            </feature>
         </config-file>
 
         <header-file src="src/ios/APPLocalNotification.h" />
@@ -75,7 +78,17 @@
         <header-file src="src/ios/UILocalNotification+APPLocalNotification.h" />
         <source-file src="src/ios/UILocalNotification+APPLocalNotification.m" />
 
+        <!-- pushnotification -->
+        <header-file src="src/ios/AppDelegate+notification.h" />
+        <source-file src="src/ios/AppDelegate+notification.m" />
 
+        <header-file src="src/ios/NotificationService.h" />
+        <source-file src="src/ios/NotificationService.m" />
+
+        <header-file src="src/ios/PushPlugin.h" />
+        <source-file src="src/ios/PushPlugin.m" />
+
+        <!-- local notification hooks-->
         <hook
             type="after_platform_add"
             src="scripts/ios/didRegisterUserNotificationSettings.js" />
@@ -91,7 +104,7 @@
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="LocalNotification">
-                <param name="android-package" value="de.appplant.cordova.plugin.localnotification.LocalNotification"/>
+                <param name="android-package" value="com.datum.hotline.plugin.hlpush.localnotification.LocalNotification"/>
             </feature>
             <feature name="PushPlugin" >
                 <param name="android-package" value="com.plugin.gcm.PushPlugin"/>
@@ -101,35 +114,35 @@
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
 
             <receiver
-                android:name="de.appplant.cordova.plugin.localnotification.TriggerReceiver"
+                android:name="com.datum.hotline.plugin.hlpush.localnotification.TriggerReceiver"
                 android:exported="false" />
 
             <receiver
-                android:name="de.appplant.cordova.plugin.localnotification.ClearReceiver"
+                android:name="com.datum.hotline.plugin.hlpush.localnotification.ClearReceiver"
                 android:exported="false" />
 
             <activity
-                android:name="de.appplant.cordova.plugin.localnotification.ClickActivity"
+                android:name="com.datum.hotline.plugin.hlpush.localnotification.ClickActivity"
                 android:launchMode="singleInstance"
                 android:theme="@android:style/Theme.NoDisplay"
                 android:exported="false" />
 
             <receiver
-                android:name="de.appplant.cordova.plugin.notification.TriggerReceiver"
+                android:name="com.datum.hotline.plugin.hlpush.notification.TriggerReceiver"
                 android:exported="false" />
 
             <receiver
-                android:name="de.appplant.cordova.plugin.notification.ClearReceiver"
+                android:name="com.datum.hotline.plugin.hlpush.notification.ClearReceiver"
                 android:exported="false" />
 
-            <receiver android:name="de.appplant.cordova.plugin.localnotification.RestoreReceiver" android:exported="false" >
+            <receiver android:name="com.datum.hotline.plugin.hlpush.localnotification.RestoreReceiver" android:exported="false" >
                 <intent-filter>
                     <action android:name="android.intent.action.BOOT_COMPLETED" />
                 </intent-filter>
             </receiver>
 
             <activity
-                android:name="de.appplant.cordova.plugin.notification.ClickActivity"
+                android:name="com.datum.hotline.plugin.hlpush.notification.ClickActivity"
                 android:launchMode="singleInstance"
                 android:theme="@android:style/Theme.NoDisplay"
                 android:exported="false" />
@@ -168,71 +181,71 @@
 
         <source-file
             src="src/android/LocalNotification.java"
-            target-dir="src/de/appplant/cordova/plugin/localnotification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/localnotification" />
 
         <source-file
             src="src/android/TriggerReceiver.java"
-            target-dir="src/de/appplant/cordova/plugin/localnotification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/localnotification" />
 
         <source-file
             src="src/android/ClickActivity.java"
-            target-dir="src/de/appplant/cordova/plugin/localnotification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/localnotification" />
 
         <source-file
             src="src/android/ClearReceiver.java"
-            target-dir="src/de/appplant/cordova/plugin/localnotification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/localnotification" />
 
         <source-file
             src="src/android/RestoreReceiver.java"
-            target-dir="src/de/appplant/cordova/plugin/localnotification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/localnotification" />
 
         <source-file
             src="src/android/notification/AbstractClearReceiver.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/AbstractClickActivity.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/AbstractRestoreReceiver.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/AbstractTriggerReceiver.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/AssetUtil.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/Builder.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/ClearReceiver.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/ClickActivity.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/Manager.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/Notification.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/Options.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
 
         <source-file
             src="src/android/notification/TriggerReceiver.java"
-            target-dir="src/de/appplant/cordova/plugin/notification" />
+            target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
         
         <!-- pushNotification -->    
         <source-file src="src/android/libs/gcm.jar" target-dir="libs/" />

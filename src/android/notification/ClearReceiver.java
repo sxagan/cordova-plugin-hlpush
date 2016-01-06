@@ -21,7 +21,7 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
-package de.appplant.cordova.plugin.notification;
+package com.datum.hotline.plugin.hlpush.notification;
 
 /**
  * The clear intent receiver is triggered when the user clears a

@@ -21,7 +21,7 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
-package de.appplant.cordova.plugin.notification;
+package com.datum.hotline.plugin.hlpush.notification;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static de.appplant.cordova.plugin.notification.Notification.PREF_KEY;
+import static com.datum.hotline.plugin.hlpush.notification.Notification.PREF_KEY;
 
 /**
  * Central way to access all or single local notifications set by specific

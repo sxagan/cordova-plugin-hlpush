@@ -12,12 +12,22 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Set;
+
+import de.appplant.cordova.plugin.localnotification.TriggerReceiver;
+import de.appplant.cordova.plugin.notification.Manager;
+
 @SuppressLint("NewApi")
 public class GCMIntentService extends GCMBaseIntentService {
 
-    public static final int NOTIFICATION_ID = 237;
+    //public static final int NOTIFICATION_ID = 237;
+    public static final int NOTIFICATION_ID = 1;
 
-    private static String TAG = "PushPlugin-GCMIntentService";
+    private static String LOGTAG = "PushPlugin-GCMIntentService";
+    static final String TAG = "HotlineNotifications";
 
     public static final String MESSAGE = "message";
 
@@ -27,13 +37,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     @Override
     public void onRegistered(Context context, String regId) {
-        Log.d(TAG, "onRegistered: " + regId);
+        Log.d(LOGTAG, "onRegistered: " + regId);
         NotificationService.getInstance(context).onRegistered(regId);
     }
 
     @Override
     public void onUnregistered(Context context, String regId) {
-        Log.d(TAG, "onUnregistered - regId: " + regId);
+        Log.d(LOGTAG, "onUnregistered - regId: " + regId);
     }
 
     @Override
@@ -45,18 +55,33 @@ public class GCMIntentService extends GCMBaseIntentService {
 
             // If in background, create notification to display in notification center
             if (!isAppInForeground) {
-                if (extras.getString(MESSAGE) != null && extras.getString(MESSAGE).length() != 0) {
+                /*if (extras.getString(MESSAGE) != null && extras.getString(MESSAGE).length() != 0) {
                     createNotification(context, extras);
-                }
+                }*/
+                //createNotification(context, extras);
+                Manager.getInstance(context).append(1, ToJson(extras),TriggerReceiver.class);
             }
 
             NotificationService.getInstance(context).onMessage(extras);
         }
     }
 
+    private JSONObject ToJson(Bundle bundle){
+        JSONObject json = new JSONObject();
+        Set<String> keys = bundle.keySet();
+        for (String key : keys) {
+            try {
+                // json.put(key, bundle.get(key)); see edit below
+                json.put(key, JSONObject.wrap(bundle.get(key)));
+            } catch(JSONException e) {
+                //Handle exception here
+            }
+        }
+        return json;
+    }
+
     public void createNotification(Context context, Bundle extras) {
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(
-                Context.NOTIFICATION_SERVICE);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String appName = getAppName(this);
 
         Intent notificationIntent = new Intent(this, PushHandlerActivity.class);
@@ -102,20 +127,34 @@ public class GCMIntentService extends GCMBaseIntentService {
         try {
             notId = Integer.parseInt(extras.getString("notId"));
         } catch (NumberFormatException e) {
-            Log.e(TAG,
+            Log.e(LOGTAG,
                     "Number format exception - Error parsing Notification ID: " + e.getMessage());
         } catch (Exception e) {
-            Log.e(TAG, "Number format exception - Error parsing Notification ID" + e.getMessage());
+            Log.e(LOGTAG, "Number format exception - Error parsing Notification ID" + e.getMessage());
         }
 
-        mNotificationManager.notify((String) appName, notId, mBuilder.build());
+        //mNotificationManager.notify((String) appName, notId, mBuilder.build());
+        mNotificationManager.notify(TAG, notId, mBuilder.build());
+
+    }
+
+    public void createNotificationEx(Context context, Bundle extras) {
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String appName = getAppName(this);
+
+        Intent notificationIntent = new Intent(this, PushHandlerActivity.class);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        notificationIntent.putExtra("pushBundle", extras);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
     }
 
     public static void cancelNotification(Context context) {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(
                 Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancel((String) getAppName(context), NOTIFICATION_ID);
+        //mNotificationManager.cancel((String) getAppName(context), NOTIFICATION_ID);
+        mNotificationManager.cancel(TAG, NOTIFICATION_ID);
     }
 
     private static String getAppName(Context context) {
@@ -129,7 +168,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     @Override
     public void onError(Context context, String errorId) {
-        Log.e(TAG, "onError - errorId: " + errorId);
+        Log.e(LOGTAG, "onError - errorId: " + errorId);
     }
 
 }

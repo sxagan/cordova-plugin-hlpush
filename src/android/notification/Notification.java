@@ -21,7 +21,7 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
-package de.appplant.cordova.plugin.notification;
+package com.datum.hotline.plugin.hlpush.notification;
 
 
 import android.app.AlarmManager;
@@ -54,6 +54,7 @@ public class Notification {
 
     // Key for private preferences
     static final String PREF_KEY = "LocalNotification";
+    static final String TAG = "HotlineNotifications";
 
     // Application context passed by constructor
     private final Context context;
@@ -190,7 +191,7 @@ public class Notification {
         if (!isRepeating() && wasInThePast()) {
             unpersist();
         } else {
-            getNotMgr().cancel(getId());
+            getNotMgr().cancel(TAG,getId());
         }
     }
 
@@ -210,7 +211,7 @@ public class Notification {
                 getBroadcast(context, 0, intent, 0);
 
         getAlarmMgr().cancel(pi);
-        getNotMgr().cancel(options.getId());
+        getNotMgr().cancel(TAG,options.getId());
 
         unpersist();
     }
@@ -232,10 +233,12 @@ public class Notification {
 
         if (Build.VERSION.SDK_INT <= 15) {
             // Notification for HoneyComb to ICS
-            getNotMgr().notify(id, builder.getNotification());
+            //getNotMgr().notify(id, builder.getNotification());
+            getNotMgr().notify(TAG,id, builder.getNotification());
         } else {
             // Notification for Jellybean and above
-            getNotMgr().notify(id, builder.build());
+            //getNotMgr().notify(id, builder.build());
+            getNotMgr().notify(TAG,id, builder.build());
         }
     }
 

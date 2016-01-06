@@ -1,5 +1,7 @@
 package com.plugin.gcm;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -8,6 +10,7 @@ import com.appgyver.cordova.AGCordovaApplicationInterface;
 import com.appgyver.event.EventService;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
@@ -35,7 +38,8 @@ public class NotificationService {
 
     public static final String USER_ACTION = "userAction";
 
-    private static String TAG = "PushPlugin-NotificationService";
+    private static String LOGTAG = "PushPlugin-NotificationService";
+    static final String TAG = "HotlineNotifications";
 
     public static final String FOREGROUND = "foreground";
 
@@ -129,7 +133,7 @@ public class NotificationService {
             mWebViewReferences.remove(webViewReference);
             webViewReference.destroy();
 
-            Log.v(TAG, "removeWebView : " + webView + " - after remove -> mWebViewReferences: "
+            Log.v(LOGTAG, "removeWebView : " + webView + " - after remove -> mWebViewReferences: "
                     + mWebViewReferences);
         }
     }
@@ -189,7 +193,7 @@ public class NotificationService {
     public void onMessage(Bundle extras) {
         JSONObject notification = createNotificationJSON(extras);
 
-        Log.v(TAG, "onMessage() -> isForeground: " + isForeground() + " isApplicationRunning "
+        Log.v(LOGTAG, "onMessage() -> isForeground: " + isForeground() + " isApplicationRunning "
                 + isApplicationRunning() + " notification: "
                 + notification);
 
@@ -205,7 +209,7 @@ public class NotificationService {
     }
 
     private void flushNotificationToWebView(WebViewReference webViewReference) {
-        Log.v(TAG, "flushNotificationToWebView() - Notifications.size(): " + mNotifications.size()
+        Log.v(LOGTAG, "flushNotificationToWebView() - Notifications.size(): " + mNotifications.size()
                 + " -> webViewReference: " + webViewReference);
 
         for (JSONObject notification : mNotifications) {
@@ -249,7 +253,7 @@ public class NotificationService {
             return notification;
 
         } catch (JSONException e) {
-            Log.e(TAG, "extrasToJSON: JSON exception");
+            Log.e(LOGTAG, "extrasToJSON: JSON exception");
         }
         return null;
     }
@@ -326,7 +330,7 @@ public class NotificationService {
 
     public void setForeground(boolean foreground) {
         if (mForeground != foreground) {
-            Log.v(TAG, "setForeground() -> oldValue: " + mForeground + " newValue: " + foreground);
+            Log.v(LOGTAG, "setForeground() -> oldValue: " + mForeground + " newValue: " + foreground);
 
             final NotificationManager notificationManager
                     = (NotificationManager) mContext.getSystemService(
@@ -349,14 +353,14 @@ public class NotificationService {
     }
 
     public void unRegister() {
-        Log.v(TAG, "unRegister");
+        Log.v(LOGTAG, "unRegister");
         GCMRegistrar.unregister(mContext);
         mRegistrationID = null;
         cleanUp();
     }
 
     private void cleanUp() {
-        Log.v(TAG, "Cleaning up");
+        Log.v(LOGTAG, "Cleaning up");
 
         mWebViewReferences.clear();
         mNotifications.clear();
@@ -412,7 +416,7 @@ public class NotificationService {
 
         public void notifyRegistered() {
             if (hasNotifiedOfRegistered()) {
-                Log.v(TAG,
+                Log.v(LOGTAG,
                         "notifyRegistered() - Webview already notified of registration. skipping callback. webview: "
                                 + getWebView());
                 return;
@@ -422,13 +426,13 @@ public class NotificationService {
                 setNotifiedOfRegistered(true);
                 getRegisterCallBack().success(mNotificationService.mRegistrationID);
             } else {
-                Log.v(TAG, "No Register callback - webview: " + getWebView());
+                Log.v(LOGTAG, "No Register callback - webview: " + getWebView());
             }
         }
 
         public void sendNotification(JSONObject notification) {
             if (hasNotification(notification)) {
-                //Log.v(TAG,
+                //Log.v(LOGTAG,
                 //        "sendNotification() - Webview already received this notification. skipping callback. webview: "
                 //                + getWebView());
                 return;
@@ -442,10 +446,10 @@ public class NotificationService {
             }
 
             if (isForeground) {
-                Log.v(TAG, "sendNotification() - foreground callback - webview: " + getWebView());
+                Log.v(LOGTAG, "sendNotification() - foreground callback - webview: " + getWebView());
                 sendNotification(getNotificationForegroundCallBack(), notification);
             } else {
-                Log.v(TAG, "sendNotification() - background callback - webview: " + getWebView());
+                Log.v(LOGTAG, "sendNotification() - background callback - webview: " + getWebView());
                 sendNotification(getNotificationBackgroundCallBack(), notification);
             }
         }
@@ -462,17 +466,17 @@ public class NotificationService {
 
                 mNotifications.add(notification);
             } else {
-                Log.v(TAG, "No Notification callback - webview: " + getWebView());
+                Log.v(LOGTAG, "No Notification callback - webview: " + getWebView());
             }
         }
 
         public void setNotificationForegroundCallBack(CallbackContext callBack) {
-            Log.v(TAG, "setNotificationForegroundCallBack() - webview: " + getWebView());
+            Log.v(LOGTAG, "setNotificationForegroundCallBack() - webview: " + getWebView());
             mNotificationForegroundCallBack = callBack;
         }
 
         public void setNotificationBackgroundCallBack(CallbackContext callBack) {
-            Log.v(TAG, "setNotificationBackgroundCallBack() - webview: " + getWebView());
+            Log.v(LOGTAG, "setNotificationBackgroundCallBack() - webview: " + getWebView());
             mNotificationBackgroundCallBack = callBack;
         }
 

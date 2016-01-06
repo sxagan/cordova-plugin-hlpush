@@ -21,11 +21,11 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
-package de.appplant.cordova.plugin.localnotification;
+package com.datum.hotline.plugin.hlpush.localnotification;
 
-import de.appplant.cordova.plugin.notification.AbstractRestoreReceiver;
-import de.appplant.cordova.plugin.notification.Builder;
-import de.appplant.cordova.plugin.notification.Notification;
+import com.datum.hotline.plugin.hlpush.notification.AbstractRestoreReceiver;
+import com.datum.hotline.plugin.hlpush.notification.Builder;
+import com.datum.hotline.plugin.hlpush.notification.Notification;
 
 /**
  * This class is triggered upon reboot of the device. It needs to re-register

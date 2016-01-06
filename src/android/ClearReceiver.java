@@ -21,9 +21,9 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
-package de.appplant.cordova.plugin.localnotification;
+package com.datum.hotline.plugin.hlpush.localnotification;
 
-import de.appplant.cordova.plugin.notification.Notification;
+import com.datum.hotline.plugin.hlpush.notification.Notification;
 
 
 /**
@@ -31,7 +31,7 @@ import de.appplant.cordova.plugin.notification.Notification;
  * notification manually. It un-persists the cleared notification from the
  * shared preferences.
  */
-public class ClearReceiver extends de.appplant.cordova.plugin.notification.ClearReceiver {
+public class ClearReceiver extends com.datum.hotline.plugin.hlpush.notification.ClearReceiver {
 
     /**
      * Called when a local notification was cleared from outside of the app.

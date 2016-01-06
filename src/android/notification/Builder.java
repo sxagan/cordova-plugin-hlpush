@@ -21,7 +21,7 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
-package de.appplant.cordova.plugin.notification;
+package com.datum.hotline.plugin.hlpush.notification;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -149,7 +149,7 @@ public class Builder {
 
         /*Intent view2 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
         PendingIntent piview2 = PendingIntent.getService(this.context, 0, view2, 0);
-        Intent view3 = new Intent(this.context, ClickActivity.class);//de.appplant.cordova.plugin.localnotification.
+        Intent view3 = new Intent(this.context, ClickActivity.class);//com.datum.hotline.plugin.hlpush.localnotification.
         view3.putExtra("Value1", "This value one for ActivityTwo");
         view3.putExtra("Value2", "This value two ActivityTwo");
         PendingIntent piview3 = PendingIntent.getService(this.context, 0, view3, 0);

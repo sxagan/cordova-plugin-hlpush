@@ -21,10 +21,10 @@
  * @APPPLANT_LICENSE_HEADER_END@
  */
 
-package de.appplant.cordova.plugin.localnotification;
+package com.datum.hotline.plugin.hlpush.localnotification;
 
-import de.appplant.cordova.plugin.notification.Builder;
-import de.appplant.cordova.plugin.notification.Notification;
+import com.datum.hotline.plugin.hlpush.notification.Builder;
+import com.datum.hotline.plugin.hlpush.notification.Notification;
 
 /**
  * The alarm receiver is triggered when a scheduled alarm is fired. This class
@@ -32,7 +32,7 @@ import de.appplant.cordova.plugin.notification.Notification;
  * Android notification bar. The notification uses the default notification
  * sound and it vibrates the phone.
  */
-public class TriggerReceiver extends de.appplant.cordova.plugin.notification.TriggerReceiver {
+public class TriggerReceiver extends com.datum.hotline.plugin.hlpush.notification.TriggerReceiver {
 
     /**
      * Called when a local notification was triggered. Does present the local
