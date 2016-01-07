@@ -59,7 +59,13 @@ public class GCMIntentService extends GCMBaseIntentService {
                     createNotification(context, extras);
                 }*/
                 //createNotification(context, extras);
-                Manager.getInstance(context).append(1, ToJson(extras),TriggerReceiver.class);
+                JSONObject appends = ToJson(extras);
+                try {
+                    appends.put("id",1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Manager.getInstance(context).append(1, appends,TriggerReceiver.class);
             }
 
             NotificationService.getInstance(context).onMessage(extras);
