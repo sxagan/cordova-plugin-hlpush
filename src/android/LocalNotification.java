@@ -179,6 +179,7 @@ public class LocalNotification extends CordovaPlugin {
      * @return
      *      Whether the action was valid.
      */
+    //issue #1086 too many methods for crosswalk
     @Override
     public boolean execute (final String action, final JSONArray args,
                             final CallbackContext command) throws JSONException {
@@ -209,10 +210,10 @@ public class LocalNotification extends CordovaPlugin {
                     schedule(args);
                     command.success();
                 }
-                else if (action.equals("update")) {
+                /*else if (action.equals("update")) {
                     update(args);
                     command.success();
-                }
+                }*/ //issue #1086 -remove update methods
                 else if (action.equals("append")) {
                     ///LOG.d("append","appended");
                     append(args);
@@ -222,54 +223,54 @@ public class LocalNotification extends CordovaPlugin {
                     cancel(args);
                     command.success();
                 }
-                else if (action.equals("cancelAll")) {
+                /*else if (action.equals("cancelAll")) {
                     cancelAll();
                     command.success();
-                }
+                }*/ //issue #1086 -remove cancelAll methods
                 else if (action.equals("clear")) {
                     clear(args);
                     command.success();
                 }
-                else if (action.equals("clearAll")) {
+                /*else if (action.equals("clearAll")) {
                     clearAll();
                     command.success();
-                }
-                else if (action.equals("isPresent")) {
+                }*/ //issue #1086 -remove clearAll methods
+                /*else if (action.equals("isPresent")) {
                     isPresent(args.optInt(0), command);
-                }
+                }*/ //issue #1086 -remove isPresent methods
                 else if (action.equals("isScheduled")) {
                     isScheduled(args.optInt(0), command);
                 }
-                else if (action.equals("isTriggered")) {
+                /*else if (action.equals("isTriggered")) {
                     isTriggered(args.optInt(0), command);
-                }
-                else if (action.equals("getAllIds")) {
+                }*/ //issue #1086 -remove isTriggered methods
+                /*else if (action.equals("getAllIds")) {
                     getAllIds(command);
-                }
+                }*/ //issue #1086 -remove getAllIds methods
                 else if (action.equals("getScheduledIds")) {
                     getScheduledIds(command);
                 }
-                else if (action.equals("getTriggeredIds")) {
+                /*else if (action.equals("getTriggeredIds")) {
                     getTriggeredIds(command);
-                }
-                else if (action.equals("getSingle")) {
+                }*/ //issue #1086 -remove getTriggeredIds methods
+                /*else if (action.equals("getSingle")) {
                     getSingle(args, command);
-                }
-                else if (action.equals("getSingleScheduled")) {
+                }*/ //issue #1086 -remove getSingle methods
+                /*else if (action.equals("getSingleScheduled")) {
                     getSingleScheduled(args, command);
-                }
-                else if (action.equals("getSingleTriggered")) {
+                }*/ //issue #1086 -remove getSingleScheduled methods
+                /*else if (action.equals("getSingleTriggered")) {
                     getSingleTriggered(args, command);
-                }
-                else if (action.equals("getAll")) {
+                }*/ //issue #1086 -remove getSingleTriggered methods
+                /*else if (action.equals("getAll")) {
                     getAll(args, command);
-                }
+                }*/ //issue #1086 -remove getAll methods
                 else if (action.equals("getScheduled")) {
                     getScheduled(args, command);
                 }
-                else if (action.equals("getTriggered")) {
+                /*else if (action.equals("getTriggered")) {
                     getTriggered(args, command);
-                }
+                }*/ //issue #1086 -remove getTriggered methods
                 else if (action.equals("deviceready")) {
                     deviceready();
                 }
@@ -317,7 +318,7 @@ public class LocalNotification extends CordovaPlugin {
      * @param updates
      *      Notification properties including their IDs
      */
-    private void update (JSONArray updates) {
+    /*private void update (JSONArray updates) {
         for (int i = 0; i < updates.length(); i++) {
             JSONObject update = updates.optJSONObject(i);
             int id = update.optInt("id", 0);
@@ -327,7 +328,7 @@ public class LocalNotification extends CordovaPlugin {
 
             fireEvent("update", notification);
         }
-    }
+    }*/ //issue #1086 -remove update methods
 
     /**
      * Append multiple local notifications.
@@ -378,10 +379,10 @@ public class LocalNotification extends CordovaPlugin {
     /**
      * Cancel all scheduled notifications.
      */
-    private void cancelAll() {
+    /*private void cancelAll() {
         getNotificationMgr().cancelAll();
         fireEvent("cancelall");
-    }
+    }*/ //issue #1086 -remove cancelAll methods
 
     /**
      * Clear multiple local notifications without canceling them.
@@ -405,10 +406,10 @@ public class LocalNotification extends CordovaPlugin {
     /**
      * Clear all triggered notifications without canceling them.
      */
-    private void clearAll() {
+    /*private void clearAll() {
         getNotificationMgr().clearAll();
         fireEvent("clearall");
-    }
+    }*/ //issue #1086 -remove clearAll methods
 
     /**
      * If a notification with an ID is present.
@@ -418,14 +419,14 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void isPresent (int id, CallbackContext command) {
+    /*private void isPresent (int id, CallbackContext command) {
         boolean exist = getNotificationMgr().exist(id);
 
         PluginResult result = new PluginResult(
                 PluginResult.Status.OK, exist);
 
         command.sendPluginResult(result);
-    }
+    }*/ //issue #1086 -remove isPresent methods
 
     /**
      * If a notification with an ID is scheduled.
@@ -453,7 +454,7 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void isTriggered (int id, CallbackContext command) {
+    /*private void isTriggered (int id, CallbackContext command) {
         boolean exist = getNotificationMgr().exist(
                 id, Notification.Type.TRIGGERED);
 
@@ -461,7 +462,7 @@ public class LocalNotification extends CordovaPlugin {
                 PluginResult.Status.OK, exist);
 
         command.sendPluginResult(result);
-    }
+    }*/ //issue #1086 -remove isTriggered methods
 
     /**
      * Set of IDs from all existent notifications.
@@ -469,11 +470,11 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void getAllIds (CallbackContext command) {
+    /*private void getAllIds (CallbackContext command) {
         List<Integer> ids = getNotificationMgr().getIds();
 
         command.success(new JSONArray(ids));
-    }
+    }*/ //issue #1086 -remove getAllIds methods
 
     /**
      * Set of IDs from all scheduled notifications.
@@ -494,12 +495,12 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void getTriggeredIds (CallbackContext command) {
+    /*private void getTriggeredIds (CallbackContext command) {
         List<Integer> ids = getNotificationMgr().getIdsByType(
                 Notification.Type.TRIGGERED);
 
         command.success(new JSONArray(ids));
-    }
+    }*/ //issue #1086 -remove getTriggeredIds methods
 
     /**
      * Options from local notification.
@@ -509,9 +510,9 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void getSingle (JSONArray ids, CallbackContext command) {
+    /*private void getSingle (JSONArray ids, CallbackContext command) {
         getOptions(ids.optString(0), Notification.Type.ALL, command);
-    }
+    }*/ //issue #1086 -remove getSingle methods
 
     /**
      * Options from scheduled notification.
@@ -521,9 +522,9 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void getSingleScheduled (JSONArray ids, CallbackContext command) {
+    /*private void getSingleScheduled (JSONArray ids, CallbackContext command) {
         getOptions(ids.optString(0), Notification.Type.SCHEDULED, command);
-    }
+    }*/ //issue #1086 -remove getSingleScheduled methods
 
     /**
      * Options from triggered notification.
@@ -533,9 +534,9 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void getSingleTriggered (JSONArray ids, CallbackContext command) {
+    /*private void getSingleTriggered (JSONArray ids, CallbackContext command) {
         getOptions(ids.optString(0), Notification.Type.TRIGGERED, command);
-    }
+    }*/ //issue #1086 -remove getSingleTriggered methods
 
     /**
      * Set of options from local notification.
@@ -545,9 +546,9 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void getAll (JSONArray ids, CallbackContext command) {
+    /*private void getAll (JSONArray ids, CallbackContext command) {
         getOptions(ids, Notification.Type.ALL, command);
-    }
+    }*/ //issue #1086 -remove getAll methods
 
     /**
      * Set of options from scheduled notifications.
@@ -569,9 +570,9 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void getTriggered (JSONArray ids, CallbackContext command) {
+    /*private void getTriggered (JSONArray ids, CallbackContext command) {
         getOptions(ids, Notification.Type.TRIGGERED, command);
-    }
+    }*/ //issue #1086 -remove getTriggered methods
 
     /**
      * Options from local notification.
@@ -583,7 +584,7 @@ public class LocalNotification extends CordovaPlugin {
      * @param command
      *      The callback context used when calling back into JavaScript.
      */
-    private void getOptions (String id, Notification.Type type,
+    /*private void getOptions (String id, Notification.Type type,
                              CallbackContext command) {
 
         JSONArray ids = new JSONArray().put(id);
@@ -592,7 +593,7 @@ public class LocalNotification extends CordovaPlugin {
                 getNotificationMgr().getOptionsBy(type, toList(ids)).get(0);
 
         command.success(options);
-    }
+    }*/ //issue #1086 -remove getOptions methods (not used)
 
     /**
      * Set of options from local notifications.
