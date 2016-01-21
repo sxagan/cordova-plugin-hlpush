@@ -248,13 +248,14 @@
             target-dir="src/com/datum/hotline/plugin/hlpush/notification" />
         
         <!-- pushNotification -->    
-        <source-file src="src/android/libs/gcm.jar" target-dir="libs/" />
+        <!-- <source-file src="src/android/libs/gcm.jar" target-dir="libs/" /> -->
         <source-file src="src/android/gcm/CordovaGCMBroadcastReceiver.java" target-dir="src/com/plugin/gcm/" />
         <source-file src="src/android/gcm/GCMIntentService.java" target-dir="src/com/plugin/gcm/" />
         <source-file src="src/android/gcm/PushHandlerActivity.java" target-dir="src/com/plugin/gcm/" />
         <source-file src="src/android/gcm/PushPlugin.java" target-dir="src/com/plugin/gcm/" />
         <source-file src="src/android/gcm/NotificationService.java" target-dir="src/com/plugin/gcm/" />
 
+        <framework src="com.google.android.gms:play-services-gcm:+" />
     </platform>
 
     <!-- windows -->
