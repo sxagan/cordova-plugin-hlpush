@@ -131,10 +131,12 @@ public class Options {
             return;
 
         Uri iconUri = assets.parse(options.optString("icon", "icon"));
+        Uri smalliconUri = assets.parse(options.optString("smallicon", "icon"));
         Uri soundUri = assets.parseSound(options.optString("sound", null));
 
         try {
             options.put("iconUri", iconUri.toString());
+            options.put("smalliconUri", smalliconUri.toString());
             options.put("soundUri", soundUri.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -298,10 +300,16 @@ public class Options {
     public int getSmallIcon () {
         String icon = options.optString("smallIcon", "icon");
 
-        int resId = assets.getResIdForDrawable(icon);
+        /*int resId = assets.getResIdForDrawable(icon);
 
         if (resId == 0) {
             resId = android.R.drawable.screen_background_dark;
+        }*/
+        try{
+            Uri uri = Uri.parse(options.optString("smalliconUri"));
+            bmp = assets.getIconFromUri(uri);
+        } catch (Exception e){
+            bmp = assets.getIconFromDrawable(icon);
         }
 
         return resId;
