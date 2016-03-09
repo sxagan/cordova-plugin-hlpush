@@ -60,9 +60,11 @@ public class GCMIntentService extends GCMBaseIntentService {
                     createNotification(context, extras);
                 }*/
                 //createNotification(context, extras);
+                Log.d(LOGTAG, "onMessage: " + extras.toString());
                 String payload = extras.getString("payload");
                 JSONObject data = null;
-                if(payload != null){
+
+                /*if(payload != null){
                     try {
                         JSONObject t = new JSONObject(payload);
                         data = t.getJSONObject("data");
@@ -75,7 +77,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                     msg = data.getString(MESSAGE);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }*/
                 //if (extras.getString(MESSAGE) != null && extras.getString(MESSAGE).length() != 0){
                 //if (data != null && data.getString(MESSAGE) != null && data.getString(MESSAGE).length() != 0){
                 if (data != null && msg != null && msg.length() != 0){
