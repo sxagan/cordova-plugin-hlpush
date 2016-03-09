@@ -60,11 +60,25 @@ public class GCMIntentService extends GCMBaseIntentService {
                     createNotification(context, extras);
                 }*/
                 //createNotification(context, extras);
-                Bundle payload = extras.getBundle("payload");
-                Bundle data = payload.getBundle("data");
-
+                String payload = extras.getString("payload");
+                JSONObject data = null;
+                if(payload != null){
+                    try {
+                        JSONObject t = new JSONObject(payload);
+                        data = t.getJSONObject("data");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                String msg = "";
+                try {
+                    msg = data.getString(MESSAGE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 //if (extras.getString(MESSAGE) != null && extras.getString(MESSAGE).length() != 0){
-                if (data.getString(MESSAGE) != null && data.getString(MESSAGE).length() != 0){
+                //if (data != null && data.getString(MESSAGE) != null && data.getString(MESSAGE).length() != 0){
+                if (data != null && msg != null && msg.length() != 0){
                     JSONObject appends = ToJson(extras);
                     try {
                         appends.put("id",1);
