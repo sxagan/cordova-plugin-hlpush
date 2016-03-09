@@ -64,6 +64,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                 String payload = extras.getString("payload");
                 JSONObject data = null;
 
+                String msg = "";
                 /*if(payload != null){
                     try {
                         JSONObject t = new JSONObject(payload);
@@ -72,7 +73,6 @@ public class GCMIntentService extends GCMBaseIntentService {
                         e.printStackTrace();
                     }
                 }
-                String msg = "";
                 try {
                     msg = data.getString(MESSAGE);
                 } catch (JSONException e) {
