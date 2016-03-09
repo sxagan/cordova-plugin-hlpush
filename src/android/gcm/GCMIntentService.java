@@ -60,8 +60,8 @@ public class GCMIntentService extends GCMBaseIntentService {
                     createNotification(context, extras);
                 }*/
                 //createNotification(context, extras);
-                Bundle payload = extras.getBundle('payload');
-                Bundle data = extras.getBundle('data');
+                Bundle payload = extras.getBundle("payload");
+                Bundle data = extras.getBundle("data");
 
                 //if (extras.getString(MESSAGE) != null && extras.getString(MESSAGE).length() != 0){
                 if (data.getString(MESSAGE) != null && data.getString(MESSAGE).length() != 0){
