@@ -29,7 +29,8 @@ public class GCMIntentService extends GCMBaseIntentService {
     private static String LOGTAG = "PushPlugin-GCMIntentService";
     static final String TAG = "HotlineNotifications";
 
-    public static final String MESSAGE = "message";
+    //public static final String MESSAGE = "message";
+    public static final String MESSAGE = "msg";
 
     public GCMIntentService() {
         super("GCMIntentService");
