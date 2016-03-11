@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.view.ViewGroup;
+import android.media.AudioManager;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -235,6 +236,9 @@ public class LocalNotification extends CordovaPlugin {
                     clearAll();
                     command.success();
                 }
+                else if (action.equals("getVolStatus")) {
+                    getVolStatus(command);
+                }
                 else if (action.equals("isPresent")) {
                     isPresent(args.optInt(0), command);
                 }
@@ -424,6 +428,33 @@ public class LocalNotification extends CordovaPlugin {
 
         PluginResult result = new PluginResult(
                 PluginResult.Status.OK, exist);
+
+        command.sendPluginResult(result);
+    }
+
+    /**
+     * If a notification with an ID is present.
+     *
+     * @param command
+     *      The callback context used when calling back into JavaScript.
+     */
+    private void getVolStatus (CallbackContext command) {
+        Context Context = this.cordova.getActivity().getApplicationContext();
+        AudioManager am = (AudioManager) Context.getSystemService(Context.AUDIO_SERVICE);
+        String statusText = "";
+        switch( am.getRingerMode() ){
+            case AudioManager.RINGER_MODE_NORMAL:
+                statusText = "NORMAL";
+                break;
+            case AudioManager.RINGER_MODE_SILENT:
+                statusText = "SILENT";
+                break;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                statusText = "VIBRATE";
+                break;
+        }
+        PluginResult result = new PluginResult(
+                PluginResult.Status.OK, statusText);
 
         command.sendPluginResult(result);
     }

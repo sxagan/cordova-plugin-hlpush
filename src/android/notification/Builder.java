@@ -210,7 +210,7 @@ public class Builder {
         if(badge > 1){
             try {
                 JSONObject dat = new JSONObject(optionsjson.optString("data"));
-                BTS_BigTitle = "HotLine";
+                BTS_BigTitle = "HotLines";
                 String msg = "";
                 for(int i = 0 ; i < dataArray.length(); i++){
                     JSONObject obj = new JSONObject(dataArray.getString(i));

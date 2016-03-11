@@ -1,4 +1,4 @@
-/*
+cordova.define("com.datum.hotline.plugin.hlpush.LocalNotification.Core", function(require, exports, module) { /*
  * Copyright (c) 2013-2015 by appPlant UG. All rights reserved.
  *
  * @APPPLANT_LICENSE_HEADER_START@
@@ -199,6 +199,10 @@ exports.cancelAll = function (callback, scope) {
  */
 exports.isPresent = function (id, callback, scope) {
     this.exec('isPresent', id || 0, callback, scope);
+};
+
+exports.getVolStatus = function (callback, scope) {
+    this.exec('getVolStatus', 0, callback, scope);
 };
 
 /**
@@ -499,3 +503,5 @@ exports.un = function (event, callback) {
         }
     }
 };
+
+});
