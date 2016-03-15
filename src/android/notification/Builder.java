@@ -271,7 +271,11 @@ public class Builder {
 
         style = new NotificationCompat.BigTextStyle()
                 //.bigText(options.getText()).setBigContentTitle(options.getTitle());
-                .bigText(BTS_BigText).setBigContentTitle(BTS_BigTitle).setSummaryText(BTS_SummaryText);
+                //.bigText(BTS_BigText).setBigContentTitle(BTS_BigTitle).setSummaryText(BTS_SummaryText);
+                .bigText(BTS_BigText).setBigContentTitle(BTS_BigTitle);
+        if (BTS_SummaryText != null && BTS_SummaryText != ""){
+            style.setSummaryText(BTS_SummaryText);
+        }
 
 
         builder = new NotificationCompat.Builder(context)
