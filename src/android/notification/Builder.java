@@ -243,7 +243,22 @@ public class Builder {
                     msg = msg.substring(0,42) + " ...";
                 }*/
                 BTS_BigText = msg;
-                BTS_SummaryText = String.format("New message in %1s post", dat.getString("posttitle"));
+                //BTS_SummaryText = String.format("New message in %1s post", dat.getString("posttitle"));
+                BTS_SummaryText = "";
+                try{
+                    if(dat.has("json")){
+                        JSONObject json = dat.getJSONObject("json");
+                        String groupName = json.getString("groupname");
+                        if(groupName != "" && groupName != null){
+                            BTS_SummaryText = groupName;
+                        }
+                    }
+
+                }
+                catch(JSONException e){
+                    e.printStackTrace();
+                    Log.e("lNtfy", "Error parsing getting JSONObject 'json'");
+                }
                 ContentTitle = BTS_BigTitle;
                 ContentText = BTS_BigText;
                 Ticker = BTS_SummaryText;
