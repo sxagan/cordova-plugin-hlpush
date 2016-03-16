@@ -296,7 +296,8 @@ public class Builder {
                 .setAutoCancel(isAutoClear)
                 .setOngoing(false)
                 .setStyle(style)
-                .setLights(LedColor, 500, 500);
+                .setLights(LedColor, 500, 500)
+                .setSound(sound);
 
         /*Intent view2 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
         PendingIntent piview2 = PendingIntent.getService(this.context, 0, view2, 0);
@@ -311,7 +312,7 @@ public class Builder {
         /*if (sound != null) {
             builder.setSound(sound);
         }*/
-        String soundname = options.getSoundName();
+        /*String soundname = options.getSoundName();
         if (soundname != null) {
             String pkg = this.context.getPackageName();
             //int resId = this.context.getResources().getIdentifier(soundname, "raw", this.context.getPackageName());
@@ -324,7 +325,7 @@ public class Builder {
             //this.context.getResources().getIdentifier("s1", "raw", this.context.getPackageName())
             builder.setSound(s);
             //builder.setSound(Uri.parse("android.resource://de.appplant.localnotification.example/s1"));
-        }
+        }*/
 
         applyDeleteReceiver(builder);
         applyContentReceiver(builder);
