@@ -312,9 +312,11 @@ public class Builder {
                 .setStyle(style)
                 .setLights(LedColor, 500, 500);
         if(soundFound){
+            Log.d(TAG,"Build sound using file path: "+sound.toString());
             builder.setSound(sound);
         }else{
             Uri sUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Log.d(TAG,"Build sound default ringtone: "+sUri.toString());
             builder.setSound(sUri);
         }
 

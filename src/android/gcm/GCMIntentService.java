@@ -82,6 +82,20 @@ public class GCMIntentService extends GCMBaseIntentService {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    
+                    String sound = appends.optString("sound", "");
+                    try {
+                        String pkg = context.getPackageName();
+                        if(!sound.isEmpty() && sound.contains("{packageName}")){
+                            sound = sound.replace("{packageName}",pkg);
+                            appends.putOpt("sound",sound);
+                        }
+
+                    } catch (Exception e) {
+                        Log.e("lNtfy", "Error replace sound pkg name");
+                        e.printStackTrace();
+                    }
+
                     Manager.getInstance(context).append(1, appends,TriggerReceiver.class);
                 }
             }
