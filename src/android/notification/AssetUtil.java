@@ -137,6 +137,7 @@ class AssetUtil {
 		String absPath = path.replaceFirst("file://", "");
 		File file = new File(absPath);
 
+        Log.d("Asset", "getting file: " + file.getAbsolutePath());
 		if (!file.exists()) {
 			Log.e("Asset", "File not found: " + file.getAbsolutePath());
 			return Uri.EMPTY;
