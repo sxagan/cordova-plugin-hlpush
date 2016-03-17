@@ -31,6 +31,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.media.RingtoneManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -191,10 +192,12 @@ public class Builder {
         NotificationCompat.Builder builder;
 
         Log.d(TAG,"Sound file uri: "+sound.toString());
+        boolean soundFound = true;
         if(sound.toString() != ""){
             File file = new File(sound.toString());
             if (!file.exists()){
                 Log.d(TAG,"File not found: "+sound.toString());
+                soundFound = false;
             }
         }
 
@@ -307,8 +310,13 @@ public class Builder {
                 .setAutoCancel(isAutoClear)
                 .setOngoing(false)
                 .setStyle(style)
-                .setLights(LedColor, 500, 500)
-                .setSound(sound);
+                .setLights(LedColor, 500, 500);
+        if(soundFound){
+            builder.setSound(sound);
+        }else{
+            Uri sUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            builder.setSound(sUri);
+        }
 
         /*Intent view2 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
         PendingIntent piview2 = PendingIntent.getService(this.context, 0, view2, 0);
