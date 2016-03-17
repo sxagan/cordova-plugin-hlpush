@@ -36,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.Random;
 
 /**
@@ -58,6 +59,8 @@ public class Builder {
 
     // Activity to handle the click event
     private Class<?> clickActivity = ClickActivity.class;
+
+    private static String TAG = "LN-Builder";
 
     /**
      * Constructor
@@ -186,6 +189,14 @@ public class Builder {
         Uri sound = options.getSoundUri();
         NotificationCompat.BigTextStyle style;
         NotificationCompat.Builder builder;
+
+        Log.d(TAG,"Sound file uri: "+sound.toString());
+        if(sound.toString() != ""){
+            File file = new File(sound.toString());
+            if (!file.exists()){
+                Log.d(TAG,"File not found: "+sound.toString());
+            }
+        }
 
         /*String summary = options.getText();
         if(summary.length() > 50){
