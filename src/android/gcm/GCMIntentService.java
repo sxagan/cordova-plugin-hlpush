@@ -87,15 +87,17 @@ public class GCMIntentService extends GCMBaseIntentService {
                     try {
                         //String pkg = context.getPackageName();
                         String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
+                        Log.d(TAG, "getExternalFilesDir path: "+ ExFilesDir);
                         if(!sound.isEmpty() && sound.startsWith("/")){
-                            sound = "file://"+ ExFilesDir + sound;
+                            sound = "file://"+ExFilesDir + sound;
                             appends.putOpt("sound",sound);
                         }
 
                     } catch (Exception e) {
-                        Log.e("lNtfy", "Error prepend sound name with getExternalFilesDir");
+                        Log.e(TAG, "Error prepend sound name with getExternalFilesDir");
                         e.printStackTrace();
                     }
+                    Log.d(TAG, "push notification sound path: "+ sound);
 
                     Manager.getInstance(context).append(1, appends,TriggerReceiver.class);
                 }
