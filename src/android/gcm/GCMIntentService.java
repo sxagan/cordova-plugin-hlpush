@@ -85,14 +85,15 @@ public class GCMIntentService extends GCMBaseIntentService {
                     
                     String sound = appends.optString("sound", "");
                     try {
-                        String pkg = context.getPackageName();
-                        if(!sound.isEmpty() && sound.contains("{packageName}")){
-                            sound = sound.replace("{packageName}",pkg);
+                        //String pkg = context.getPackageName();
+                        String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
+                        if(!sound.isEmpty() && sound.startsWith("/")){
+                            sound = "file://"+ ExFilesDir + sound;
                             appends.putOpt("sound",sound);
                         }
 
                     } catch (Exception e) {
-                        Log.e("lNtfy", "Error replace sound pkg name");
+                        Log.e("lNtfy", "Error prepend sound name with getExternalFilesDir");
                         e.printStackTrace();
                     }
 

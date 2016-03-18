@@ -354,7 +354,7 @@ public class LocalNotification extends CordovaPlugin {
                 }
             }
 
-            String sound = append.optString("sound", "");
+            /*String sound = append.optString("sound", "");
             try {
                 String pkg = this.cordova.getActivity().getApplicationContext().getPackageName();
                 if(!sound.isEmpty() && sound.contains("{packageName}")){
@@ -365,7 +365,7 @@ public class LocalNotification extends CordovaPlugin {
             } catch (Exception e) {
                 Log.e("lNtfy", "Error replace sound pkg name");
                 e.printStackTrace();
-            }
+            }*/
 
             Notification notification =
                     getNotificationMgr().append(id, append, TriggerReceiver.class);
