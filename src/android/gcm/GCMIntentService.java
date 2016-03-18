@@ -89,7 +89,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                         //String pkg = context.getPackageName();
                         String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
                         Log.d(TAG, "getExternalFilesDir path: "+ ExFilesDir);
-                        if(!sound.isEmpty() && sound.startsWith("/")){
+                        if(!sound.isEmpty()){
                             String joinedPath = new File(ExFilesDir, sound).toString();
                             sound = "file://"+joinedPath;
                             appends.putOpt("sound",sound);
