@@ -101,6 +101,23 @@ public class GCMIntentService extends GCMBaseIntentService {
                     }
                     Log.d(TAG, "push notification sound path: "+ sound);
 
+                    String icon = appends.optString("icon", "");
+                    try {
+                        //String pkg = context.getPackageName();
+                        String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
+                        //Log.d(TAG, "getExternalFilesDir path: "+ ExFilesDir);
+                        if(!icon.isEmpty()){
+                            String joinedPath = new File(ExFilesDir, icon).toString();
+                            icon = "file://"+joinedPath;
+                            appends.putOpt("icon",icon);
+                        }
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error prepend icon name with getExternalFilesDir");
+                        e.printStackTrace();
+                    }
+                    Log.d(TAG, "push notification icon path: "+ icon);
+
                     Manager.getInstance(context).append(1, appends,TriggerReceiver.class);
                 }
             }
