@@ -15,6 +15,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.Set;
 
 import com.datum.hotline.plugin.hlpush.localnotification.TriggerReceiver;
@@ -89,7 +90,8 @@ public class GCMIntentService extends GCMBaseIntentService {
                         String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
                         Log.d(TAG, "getExternalFilesDir path: "+ ExFilesDir);
                         if(!sound.isEmpty() && sound.startsWith("/")){
-                            sound = "file://"+ExFilesDir + sound;
+                            String joinedPath = new File(ExFilesDir, sound).toString();
+                            sound = "file://"+joinedPath;
                             appends.putOpt("sound",sound);
                         }
 
