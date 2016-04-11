@@ -266,7 +266,7 @@ public class Options {
     }
 
     public Uri getSoundPath() {
-        return options.optString("sound")
+        return options.optString("sound");
     }
 
     public String getSoundName() {
