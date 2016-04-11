@@ -266,11 +266,11 @@ public class Options {
         return uri;
     }
 
-    public String getSoundPath() {
+    /*public String getSoundPath() {
         Log.d(LOGTAG, "Getting sound path");
 
         return options.optString("sound");
-    }
+    }*/
 
     public String getSoundName() {
         String name = null;
