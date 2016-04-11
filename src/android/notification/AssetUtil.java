@@ -57,6 +57,8 @@ class AssetUtil {
     // Placeholder URI for default sound
     private static final String DEFAULT_SOUND = "res://platform_default";
 
+    private static String LOGTAG = "LN-AssetUtil";
+
     // Ref to the context passed through the constructor to access the
     // resources and app directory.
     private final Context context;
@@ -403,14 +405,23 @@ class AssetUtil {
     private String extractResourceName (String resPath) {
         String drawable = resPath;
 
-        if (drawable.contains("/")) {
-            drawable = drawable.substring(drawable.lastIndexOf('/') + 1);
+        try{
+            if (drawable.contains("/")) {
+                drawable = drawable.substring(drawable.lastIndexOf('/') + 1);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            Log.e(LOGTAG,"error trying to substring "+ e);
         }
 
-        if (resPath.contains(".")) {
-            drawable = drawable.substring(0, drawable.lastIndexOf('.'));
+        try{
+            if (resPath.contains(".")) {
+                drawable = drawable.substring(0, drawable.lastIndexOf('.'));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            Log.e(LOGTAG,"error trying to substring "+ e);
         }
-
         return drawable;
     }
 
