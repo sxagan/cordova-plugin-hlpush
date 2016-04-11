@@ -266,9 +266,9 @@ public class Options {
         return uri;
     }
 
-    public Uri getSoundPath() {
+    public String getSoundPath() {
         Log.d(LOGTAG, "Getting sound path");
-        
+
         return options.optString("sound");
     }
 
