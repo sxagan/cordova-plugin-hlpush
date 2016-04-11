@@ -88,7 +88,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                     try {
                         //String pkg = context.getPackageName();
                         String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
-                        Log.d(TAG, "getExternalFilesDir path: "+ ExFilesDir);
+                        Log.d(LOGTAG, "getExternalFilesDir path: "+ ExFilesDir);
                         if(!sound.isEmpty()){
                             String joinedPath = new File(ExFilesDir, sound).toString();
                             sound = "file://"+joinedPath;
@@ -96,16 +96,16 @@ public class GCMIntentService extends GCMBaseIntentService {
                         }
 
                     } catch (Exception e) {
-                        Log.e(TAG, "Error prepend sound name with getExternalFilesDir");
+                        Log.e(LOGTAG, "Error prepend sound name with getExternalFilesDir");
                         e.printStackTrace();
                     }
-                    Log.d(TAG, "push notification sound path: "+ sound);
+                    Log.d(LOGTAG, "push notification sound path: "+ sound);
 
                     String icon = appends.optString("icon", "");
                     try {
                         //String pkg = context.getPackageName();
                         String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
-                        //Log.d(TAG, "getExternalFilesDir path: "+ ExFilesDir);
+                        //Log.d(LOGTAG, "getExternalFilesDir path: "+ ExFilesDir);
                         if(!icon.isEmpty()){
                             String joinedPath = new File(ExFilesDir, icon).toString();
                             icon = "file://"+joinedPath;
@@ -113,10 +113,10 @@ public class GCMIntentService extends GCMBaseIntentService {
                         }
 
                     } catch (Exception e) {
-                        Log.e(TAG, "Error prepend icon name with getExternalFilesDir");
+                        Log.e(LOGTAG, "Error prepend icon name with getExternalFilesDir");
                         e.printStackTrace();
                     }
-                    Log.d(TAG, "push notification icon path: "+ icon);
+                    Log.d(LOGTAG, "push notification icon path: "+ icon);
 
                     Manager.getInstance(context).append(1, appends,TriggerReceiver.class);
                 }

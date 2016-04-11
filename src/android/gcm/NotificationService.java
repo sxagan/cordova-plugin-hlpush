@@ -38,7 +38,7 @@ public class NotificationService {
 
     public static final String USER_ACTION = "userAction";
 
-    private static String LOGTAG = "PushPlugin-NotificationService";
+    private static String LOGTAG = "LN-NotificationService";
     static final String TAG = "HotlineNotifications";
 
     public static final String FOREGROUND = "foreground";

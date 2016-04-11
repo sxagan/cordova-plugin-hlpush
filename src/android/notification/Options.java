@@ -265,6 +265,10 @@ public class Options {
         return uri;
     }
 
+    public Uri getSoundPath() {
+        return options.optString("sound")
+    }
+
     public String getSoundName() {
         String name = null;
 

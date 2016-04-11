@@ -188,9 +188,11 @@ public class Builder {
 
     public Notification build() {
         Uri sound = options.getSoundUri();
+        String soundpath = options.getSoundPath();
         NotificationCompat.BigTextStyle style;
         NotificationCompat.Builder builder;
 
+        Log.d(TAG,"Sound file path: "+soundpath);
         Log.d(TAG,"Sound file uri: "+sound.toString());
         boolean soundFound = true;
         if(sound.toString() != ""){
