@@ -44,6 +44,7 @@ public class Options {
 
     // Key name for bundled extras
     static final String EXTRA = "NOTIFICATION_OPTIONS";
+    private static String LOGTAG = "LN-GCMIntentService";
 
     // The original JSON object
     private JSONObject options = new JSONObject();
@@ -266,6 +267,7 @@ public class Options {
     }
 
     public Uri getSoundPath() {
+        Log.d(LOGTAG, "Getting sound path");
         return options.optString("sound");
     }
 
