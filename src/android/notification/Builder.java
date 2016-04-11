@@ -188,7 +188,7 @@ public class Builder {
 
     public Notification build() {
         Uri sound = options.getSoundUri();
-        String soundpath = options.getSoundPath();
+        //String soundpath = options.getSoundPath();
         NotificationCompat.BigTextStyle style;
         NotificationCompat.Builder builder;
 
