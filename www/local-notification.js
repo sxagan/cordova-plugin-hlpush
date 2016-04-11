@@ -171,6 +171,16 @@ exports.isPresent = function (id, callback, scope) {
 exports.getVolStatus = function (callback, scope) {
     this.core.getVolStatus(callback, scope);
 };
+/*
+
+cordova.plugins.notification.local.getDeviceInfo(function(result){
+    console.log("Result",result)
+})
+
+*/
+exports.getDeviceInfo = function (callback, scope) {
+    this.core.getDeviceInfo(callback, scope);
+};
 
 /**
  * Check if a notification with an ID is scheduled.

@@ -31,6 +31,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.view.ViewGroup;
 import android.media.AudioManager;
+import android.os.Build;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -275,6 +276,9 @@ public class LocalNotification extends CordovaPlugin {
                 else if (action.equals("getTriggered")) {
                     getTriggered(args, command);
                 }
+                else if (action.equals("getDeviceInfo")) {
+                    getDeviceInfo(command);
+                }
                 else if (action.equals("deviceready")) {
                     deviceready();
                 }
@@ -468,6 +472,26 @@ public class LocalNotification extends CordovaPlugin {
         }
         PluginResult result = new PluginResult(
                 PluginResult.Status.OK, statusText);
+
+        command.sendPluginResult(result);
+    }
+
+    private void getDeviceInfo (CallbackContext command) {
+        Context Context = this.cordova.getActivity().getApplicationContext();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("BRAND", Build.BRAND);
+            json.put("DEVICE", Build.DEVICE);
+            json.put("MANUFACTURER", Build.MANUFACTURER);
+            json.put("MODEL", Build.MODEL);
+            json.put("PRODUCT", Build.PRODUCT);
+            json.put("SERIAL", Build.SERIAL);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        PluginResult result = new PluginResult(
+                PluginResult.Status.OK, json);
 
         command.sendPluginResult(result);
     }
