@@ -196,9 +196,11 @@ public class Builder {
         Log.d(TAG,"Sound file uri: "+sound.toString());
         boolean soundFound = true;
         if(sound.toString() != ""){
-            File file = new File(sound.toString());
+            String absSoundPath = sound.toString().replaceFirst("file://", "");
+            Log.d(TAG,"absSoundPath: "+absSoundPath);
+            File file = new File(absSoundPath);
             if (!file.exists()){
-                Log.d(TAG,"File not found: "+sound.toString());
+                Log.d(TAG,"File not found: "+absSoundPath);
                 soundFound = false;
             }
         }
@@ -313,15 +315,15 @@ public class Builder {
                 .setOngoing(false)
                 .setStyle(style)
                 .setLights(LedColor, 500, 500);
-        /*if(soundFound){
+        if(soundFound){
             Log.d(TAG,"Build sound using file path: "+sound.toString());
             builder.setSound(sound);
         }else{
             Uri sUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Log.d(TAG,"Build sound default ringtone: "+sUri.toString());
             builder.setSound(sUri);
-        }*/
-        builder.setSound(sound);
+        }
+        //builder.setSound(sound);
 
         /*Intent view2 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
         PendingIntent piview2 = PendingIntent.getService(this.context, 0, view2, 0);
