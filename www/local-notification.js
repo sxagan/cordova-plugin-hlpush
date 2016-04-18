@@ -182,6 +182,10 @@ exports.getDeviceInfo = function (callback, scope) {
     this.core.getDeviceInfo(callback, scope);
 };
 
+exports.getUri = function (callback, scope) {
+    this.core.getUri(callback, scope);
+};
+
 /**
  * Check if a notification with an ID is scheduled.
  *

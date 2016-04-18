@@ -207,6 +207,9 @@ exports.getVolStatus = function (callback, scope) {
 exports.getDeviceInfo = function (callback, scope) {
     this.exec('getDeviceInfo', 0, callback, scope);
 };
+exports.getUri = function (callback, scope) {
+    this.exec('getUri', 0, callback, scope);
+};
 
 /**
  * Check if a notification with an ID is scheduled.

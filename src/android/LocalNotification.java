@@ -25,6 +25,7 @@ package com.datum.hotline.plugin.hlpush.localnotification;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,7 @@ import android.os.Build;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaActivity;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
@@ -279,6 +281,9 @@ public class LocalNotification extends CordovaPlugin {
                 else if (action.equals("getDeviceInfo")) {
                     getDeviceInfo(command);
                 }
+                else if (action.equals("getUri")) {
+                    getUri(command);
+                }
                 else if (action.equals("deviceready")) {
                     deviceready();
                 }
@@ -494,6 +499,13 @@ public class LocalNotification extends CordovaPlugin {
                 PluginResult.Status.OK, json);
 
         command.sendPluginResult(result);
+    }
+
+    private void getUri (CallbackContext command) {
+        Intent i = ((CordovaActivity)this.cordova.getActivity()).getIntent();
+        String uri = i.getDataString();
+        //return new PluginResult(PluginResult.Status.OK, uri);
+        command.sendPluginResult(new PluginResult(PluginResult.Status.OK, uri));
     }
 
     /**
