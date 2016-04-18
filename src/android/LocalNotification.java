@@ -36,7 +36,6 @@ import android.os.Build;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaActivity;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
@@ -502,7 +501,7 @@ public class LocalNotification extends CordovaPlugin {
     }
 
     private void getUri (CallbackContext command) {
-        Intent i = ((CordovaActivity)this.cordova.getActivity()).getIntent();
+        Intent i = cordova.getActivity().getIntent();
         String uri = i.getDataString();
         //return new PluginResult(PluginResult.Status.OK, uri);
         command.sendPluginResult(new PluginResult(PluginResult.Status.OK, uri));
