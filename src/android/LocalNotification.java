@@ -158,6 +158,7 @@ public class LocalNotification extends CordovaPlugin {
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d("lNtfy","onNewIntent");
+        Log.d("lNtfy","onNewIntent"+intent.toString());
         String state = "";
         if(intent.getAction() == "android.intent.action.VIEW"){
             state = intent.getDataString();
