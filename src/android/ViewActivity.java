@@ -43,7 +43,7 @@ public class ViewActivity extends Activity {
         Log.d("ViewActivity","onCreate=>pkgName: "+pkgName);
         Log.d("ViewActivity","onCreate=>data: "+data);
 
-        SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(pkgName,MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("hotlines", data);
         editor.commit();
