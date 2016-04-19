@@ -26,13 +26,13 @@ package com.datum.hotline.plugin.hlpush.localnotification;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.view.ViewGroup;
 import android.media.AudioManager;
-import android.os.Build;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -43,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -152,12 +153,29 @@ public class LocalNotification extends CordovaPlugin {
         super.onResume(multitasking);
         isInBackground = false;
         deviceready();
+
+        Log.d("lNtfy","onResume");
+        String pkgName = cordova.getActivity().getPackageName();
+        SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
+        String s = sharedPref.getString("hotlines", "");
+        Log.d("lNtfy","From sharedpref: "+s);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("hotlines", "");
+        Boolean a = editor.commit();
+
+        String params = "\"" + s + "\"";
+        String js = "cordova.plugins.notification.local.core.fireEvent(" +
+                "\"" + "newintent" + "\"," + params + ")";
+
+        //sendJavascript(js);
+        sendJavascriptToAllWebViews(js);
     }
 
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d("lNtfy","onNewIntent");
+        /*Log.d("lNtfy","onNewIntent");
         Log.d("lNtfy","onNewIntent"+intent.toString());
         String state = "";
         if(intent.getAction() == "android.intent.action.VIEW"){
@@ -170,7 +188,7 @@ public class LocalNotification extends CordovaPlugin {
                 "\"" + "newintent" + "\"," + params + ")";
 
         //sendJavascript(js);
-        sendJavascriptToAllWebViews(js);
+        sendJavascriptToAllWebViews(js);*/
     }
 
     /**

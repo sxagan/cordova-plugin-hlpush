@@ -147,6 +147,18 @@
                 android:launchMode="singleInstance"
                 android:theme="@android:style/Theme.NoDisplay"
                 android:exported="false" />
+            <activity
+                android:name="com.datum.hotline.plugin.hlpush.notification.ViewActivity"
+                android:launchMode="singleInstance"
+                android:theme="@android:style/Theme.NoDisplay"
+                android:exported="false" >
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <data android:scheme="hotlines" />
+                </intent-filter>
+            </activity>
 
             <!-- pushnotification -->
             <activity android:name="com.plugin.gcm.PushHandlerActivity" android:exported="true"/>
@@ -177,14 +189,14 @@
             <!-- pushnotification -->
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="application/activity">
+        <!-- <config-file target="AndroidManifest.xml" parent="application/activity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="hotlines" />
             </intent-filter>
-        </config-file>
+        </config-file> -->
         
         <!-- <source-file src="src/assets/icon.png" target-dir="res/drawable" /> -->
 
@@ -206,6 +218,10 @@
 
         <source-file
             src="src/android/RestoreReceiver.java"
+            target-dir="src/com/datum/hotline/plugin/hlpush/localnotification" />
+
+        <source-file
+            src="src/android/ViewActivity.java"
             target-dir="src/com/datum/hotline/plugin/hlpush/localnotification" />
 
         <source-file
