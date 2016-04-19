@@ -19,6 +19,9 @@ public class ViewActivity extends Activity {
 
         Intent i = getIntent();
         String data = i.getDataString();
+        Log.d("ViewActivity","onCreate=>pkgName: "+pkgName);
+        Log.d("ViewActivity","onCreate=>data: "+data);
+
         SharedPreferences sharedPref = getSharedPreferences(pkgName,MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("hotlines", data);
@@ -35,8 +38,11 @@ public class ViewActivity extends Activity {
         PackageManager pm = getPackageManager();
         String pkgName = getPackageName();
 
-        Log.d("ViewActivity","onNewIntent");
         String data = intent.getDataString();
+
+        Log.d("ViewActivity","onCreate=>pkgName: "+pkgName);
+        Log.d("ViewActivity","onCreate=>data: "+data);
+
         SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("hotlines", data);
