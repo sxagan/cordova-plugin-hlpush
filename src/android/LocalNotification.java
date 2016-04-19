@@ -154,6 +154,24 @@ public class LocalNotification extends CordovaPlugin {
         deviceready();
     }
 
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d("lNtfy","onNewIntent");
+        String state = "";
+        if(intent.getAction() == "android.intent.action.VIEW"){
+            state = intent.getDataString();
+        }
+
+        String params = "\"" + state + "\"";
+
+        String js = "cordova.plugins.notification.local.core.fireEvent(" +
+                "\"" + "newintent" + "\"," + params + ")";
+
+        //sendJavascript(js);
+        sendJavascriptToAllWebViews(js);
+    }
+
     /**
      * The final call you receive before your activity is destroyed.
      */
