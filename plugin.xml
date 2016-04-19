@@ -126,7 +126,19 @@
                 android:launchMode="singleInstance"
                 android:theme="@android:style/Theme.NoDisplay"
                 android:exported="false" />
-                
+
+            <activity
+                android:name="com.datum.hotline.plugin.hlpush.localnotification.ViewActivity"
+                android:launchMode="singleInstance"
+                android:theme="@android:style/Theme.NoDisplay"
+                 >
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <data android:scheme="hotlines" />
+                </intent-filter>
+            </activity>                
 
             <receiver
                 android:name="com.datum.hotline.plugin.hlpush.notification.TriggerReceiver"
@@ -147,18 +159,7 @@
                 android:launchMode="singleInstance"
                 android:theme="@android:style/Theme.NoDisplay"
                 android:exported="false" />
-            <activity
-                android:name="com.datum.hotline.plugin.hlpush.notification.ViewActivity"
-                android:launchMode="singleInstance"
-                android:theme="@android:style/Theme.NoDisplay"
-                android:exported="false" >
-                <intent-filter>
-                    <action android:name="android.intent.action.VIEW" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                    <category android:name="android.intent.category.BROWSABLE" />
-                    <data android:scheme="hotlines" />
-                </intent-filter>
-            </activity>
+
 
             <!-- pushnotification -->
             <activity android:name="com.plugin.gcm.PushHandlerActivity" android:exported="true"/>
