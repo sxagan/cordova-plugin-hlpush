@@ -125,14 +125,8 @@
                 android:name="com.datum.hotline.plugin.hlpush.localnotification.ClickActivity"
                 android:launchMode="singleInstance"
                 android:theme="@android:style/Theme.NoDisplay"
-                android:exported="false" >
-                <intent-filter>
-                    <action android:name="android.intent.action.VIEW" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                    <category android:name="android.intent.category.BROWSABLE" />
-                    <data android:scheme="hotlines" />
-                </intent-filter>
-            </activity>
+                android:exported="false" />
+                
 
             <receiver
                 android:name="com.datum.hotline.plugin.hlpush.notification.TriggerReceiver"
@@ -183,7 +177,14 @@
             <!-- pushnotification -->
         </config-file>
 
-        
+        <config-file target="AndroidManifest.xml" parent="application/activity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="hotlines" />
+            </intent-filter>
+        </config-file>
         
         <!-- <source-file src="src/assets/icon.png" target-dir="res/drawable" /> -->
 
