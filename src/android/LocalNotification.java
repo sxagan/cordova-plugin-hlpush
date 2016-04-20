@@ -178,7 +178,15 @@ public class LocalNotification extends CordovaPlugin {
 
             //sendJavascript(js);
             //sendJavascriptToAllWebViews(js);
-            sendJavascriptToAllWebViews(js,"drawer.html");
+            //sendJavascriptToAllWebViews(js,"drawer.html");
+
+            if (!deviceready) {
+                Log.d("lNtfy","WakeUpOnCustomScheme - device not ready");
+                eventQueue.add(js);
+                //return;
+            }else{
+                sendJavascriptToAllWebViews(js,"drawer.html");
+            }
         }else{
             Log.d("lNtfy",source+"=>new intent empty");
         }
