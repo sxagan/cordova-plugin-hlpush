@@ -130,8 +130,7 @@
             <activity
                 android:name="com.datum.hotline.plugin.hlpush.localnotification.ViewActivity"
                 android:launchMode="singleInstance"
-                android:theme="@android:style/Theme.NoDisplay"
-                 >
+                android:theme="@android:style/Theme.NoDisplay" android:exported="true" >
                 <intent-filter>
                     <action android:name="android.intent.action.VIEW" />
                     <category android:name="android.intent.category.DEFAULT" />
