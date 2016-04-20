@@ -128,6 +128,8 @@ public class LocalNotification extends CordovaPlugin {
             registerWebView(webView);
         }
 
+        getCustomScheme("onInit");
+
     }
 
     /**
@@ -154,24 +156,36 @@ public class LocalNotification extends CordovaPlugin {
         isInBackground = false;
         deviceready();
 
-        Log.d("lNtfy","onResume");
+        getCustomScheme("onResume");
+
+    }
+
+    private void getCustomScheme(String source){
+        Log.d("lNtfy",source);
         String pkgName = cordova.getActivity().getPackageName();
-        Log.d("lNtfy","onResume=>pkgName: " + pkgName);
         SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
         String s = sharedPref.getString("hotlines", "");
-        Log.d("lNtfy","pkgName: "+pkgName);
-        Log.d("lNtfy","From sharedpref: "+s);
+        Log.d("lNtfy",source+"=>pkgName: "+pkgName);
+        Log.d("lNtfy",source+"=>From sharedpref: "+s);
+
+        Intent i = cordova.getActivity().getIntent();
+        Log.d("lNtfy",source+"=>getIntent(): "+i.toString());
+
+        if(s != ""){
+            String params = "\"" + s + "\"";
+            String js = "cordova.plugins.notification.local.core.fireEvent(" +
+                    "\"" + "newintent" + "\"," + params + ")";
+
+            //sendJavascript(js);
+            //sendJavascriptToAllWebViews(js);
+            sendJavascriptToAllWebViews(js,"drawer.html");
+        }else{
+            Log.d("lNtfy",source+"=>new intent empty");
+        }
 
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("hotlines", "");
         Boolean a = editor.commit();
-
-        String params = "\"" + s + "\"";
-        String js = "cordova.plugins.notification.local.core.fireEvent(" +
-                "\"" + "newintent" + "\"," + params + ")";
-
-        //sendJavascript(js);
-        sendJavascriptToAllWebViews(js);
     }
 
     @Override
@@ -832,6 +846,17 @@ public class LocalNotification extends CordovaPlugin {
         for (WebViewReference webViewReference : mWebViewReferences) {
             Log.d("lNtfy","sendJavascriptToAllWebViews - Running sendJavascript on webview - "+ webViewReference.toString());
             sendJavascript(js, webViewReference.getWebView());
+        }
+    }
+
+    private static void sendJavascriptToAllWebViews(final String js, String url) {
+        Log.d("lNtfy","sendJavascriptToAllWebViews - WebView list size - "+ mWebViewReferences.size());
+        for (WebViewReference webViewReference : mWebViewReferences) {
+            Log.d("lNtfy","sendJavascriptToAllWebViews - Running sendJavascript on webview - "+ webViewReference.toString());
+            String ref = webViewReference.toString();
+            if(ref.contains(url)){
+                sendJavascript(js, webViewReference.getWebView());
+            }
         }
     }
 
