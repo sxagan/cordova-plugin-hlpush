@@ -177,7 +177,7 @@ public class LocalNotification extends CordovaPlugin {
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Log.d("lNtfy","onNewIntent");
+        /*Log.d("lNtfy","onNewIntent");
         Log.d("lNtfy","onNewIntent"+intent.toString());
         String state = "";
         if(intent.getAction() == "android.intent.action.VIEW"){
@@ -190,7 +190,7 @@ public class LocalNotification extends CordovaPlugin {
                 "\"" + "newintent" + "\"," + params + ")";
 
         //sendJavascript(js);
-        sendJavascriptToAllWebViews(js);
+        sendJavascriptToAllWebViews(js);*/
     }
 
     /**

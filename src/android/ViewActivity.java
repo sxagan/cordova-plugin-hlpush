@@ -28,7 +28,7 @@ public class ViewActivity extends Activity {
         Boolean a = editor.commit();
 
         Intent intent = pm.getLaunchIntentForPackage(pkgName);
-        intent.putExtra("hotlines", data);
+        //intent.putExtra("hotlines", data);
         startActivity(intent);
     }
 
@@ -49,7 +49,7 @@ public class ViewActivity extends Activity {
         editor.commit();
 
         Intent intent = pm.getLaunchIntentForPackage(pkgName);
-        intent.putExtra("hotlines", data);
+        //intent.putExtra("hotlines", data);
         startActivity(intent);
     }
 }
