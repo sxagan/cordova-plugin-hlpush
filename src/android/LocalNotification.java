@@ -159,6 +159,7 @@ public class LocalNotification extends CordovaPlugin {
         Log.d("lNtfy","onResume=>pkgName: " + pkgName);
         SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
         String s = sharedPref.getString("hotlines", "");
+        Log.d("lNtfy","pkgName: "+pkgName);
         Log.d("lNtfy","From sharedpref: "+s);
 
         SharedPreferences.Editor editor = sharedPref.edit();

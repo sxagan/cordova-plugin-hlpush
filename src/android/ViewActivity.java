@@ -28,17 +28,17 @@ public class ViewActivity extends Activity {
         Boolean a = editor.commit();
 
         Intent intent = pm.getLaunchIntentForPackage(pkgName);
-
+        intent.putExtra("hotlines", data);
         startActivity(intent);
     }
 
     @Override
-    public void onNewIntent (Intent intent) {
-        super.onNewIntent(intent);
+    public void onNewIntent (Intent i) {
+        super.onNewIntent(i);
         PackageManager pm = getPackageManager();
         String pkgName = getPackageName();
 
-        String data = intent.getDataString();
+        String data = i.getDataString();
 
         Log.d("ViewActivity","onCreate=>pkgName: "+pkgName);
         Log.d("ViewActivity","onCreate=>data: "+data);
@@ -48,8 +48,8 @@ public class ViewActivity extends Activity {
         editor.putString("hotlines", data);
         editor.commit();
 
-        Intent i = pm.getLaunchIntentForPackage(pkgName);
-
-        startActivity(i);
+        Intent intent = pm.getLaunchIntentForPackage(pkgName);
+        intent.putExtra("hotlines", data);
+        startActivity(intent);
     }
 }
