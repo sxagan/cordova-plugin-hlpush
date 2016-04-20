@@ -132,6 +132,13 @@ public class LocalNotification extends CordovaPlugin {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("lNtfy","onStart");
+
+    }
+
     /**
      * Called when the system is about to start resuming a previous activity.
      *
@@ -177,16 +184,16 @@ public class LocalNotification extends CordovaPlugin {
                     "\"" + "newintent" + "\"," + params + ")";
 
             //sendJavascript(js);
-            //sendJavascriptToAllWebViews(js);
+            sendJavascriptToAllWebViews(js);
             //sendJavascriptToAllWebViews(js,"drawer.html");
 
-            if (!deviceready) {
+            /*if (!deviceready) {
                 Log.d("lNtfy","WakeUpOnCustomScheme - device not ready");
                 eventQueue.add(js);
                 //return;
             }else{
                 sendJavascriptToAllWebViews(js,"drawer.html");
-            }
+            }*/
         }else{
             Log.d("lNtfy",source+"=>new intent empty");
         }
