@@ -128,10 +128,13 @@
                 android:exported="false" />
 
             <activity
-                android:exported="true" 
                 android:name="com.datum.hotline.plugin.hlpush.localnotification.ViewActivity"
-                android:launchMode="singleInstance"
-                android:theme="@android:style/Theme.NoDisplay" >
+                android:launchMode="singleTask"
+                android:theme="@android:style/Theme.NoDisplay" 
+                android:exported="true" 
+                android:excludeFromRecents="true" 
+                
+                >
                 <intent-filter>
                     <action android:name="android.intent.action.VIEW" />
                     <category android:name="android.intent.category.DEFAULT" />
