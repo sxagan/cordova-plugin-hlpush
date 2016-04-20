@@ -132,12 +132,12 @@ public class LocalNotification extends CordovaPlugin {
 
     }
 
-    @Override
+    /*@Override
     public void onStart() {
         super.onStart();
         Log.d("lNtfy","onStart");
 
-    }
+    }*/
 
     /**
      * Called when the system is about to start resuming a previous activity.
