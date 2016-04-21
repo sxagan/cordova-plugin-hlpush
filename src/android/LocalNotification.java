@@ -891,9 +891,10 @@ public class LocalNotification extends CordovaPlugin {
     private static void sendJavascriptToAllWebViews(final String js, String url) {
         Log.d("lNtfy","sendJavascriptToAllWebViews - WebView list size - "+ mWebViewReferences.size());
         for (WebViewReference webViewReference : mWebViewReferences) {
-            Log.d("lNtfy","sendJavascriptToAllWebViews - Running sendJavascript on webview - "+ webViewReference.toString());
+            //Log.d("lNtfy","sendJavascriptToAllWebViews - Running sendJavascript on webview - "+ webViewReference.toString());
             String ref = webViewReference.toString();
             if(ref.contains(url)){
+                Log.d("lNtfy","sendJavascriptToAllWebViews - Running only sendJavascript on webview - "+ webViewReference.toString());
                 sendJavascript(js, webViewReference.getWebView());
             }
         }
