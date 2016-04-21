@@ -169,7 +169,7 @@ public class LocalNotification extends CordovaPlugin {
                 getCustomScheme("onResume");
             }
         }
-        catch(e){
+        catch(Exception e){
             e.printStackTrace();
         }
 
