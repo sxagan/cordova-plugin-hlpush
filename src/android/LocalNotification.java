@@ -161,9 +161,9 @@ public class LocalNotification extends CordovaPlugin {
     public void onResume(boolean multitasking) {
         super.onResume(multitasking);
         isInBackground = false;
-        getCustomScheme("onResume");
         deviceready();
 
+        getCustomScheme("onResume");
 
     }
 
@@ -184,8 +184,8 @@ public class LocalNotification extends CordovaPlugin {
                     "\"" + "newintent" + "\"," + params + ")";
 
             //sendJavascript(js);
-            sendJavascriptToAllWebViews(js);
-            //sendJavascriptToAllWebViews(js,"drawer.html");
+            //sendJavascriptToAllWebViews(js);
+            sendJavascriptToAllWebViews(js,"drawer.html");
 
             /*if (!deviceready) {
                 Log.d("lNtfy","WakeUpOnCustomScheme - device not ready");
@@ -198,9 +198,9 @@ public class LocalNotification extends CordovaPlugin {
             Log.d("lNtfy",source+"=>new intent empty");
         }
 
-        SharedPreferences.Editor editor = sharedPref.edit();
+        /*SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("hotlines", "");
-        Boolean a = editor.commit();
+        Boolean a = editor.commit();*/
     }
 
     @Override
@@ -350,6 +350,9 @@ public class LocalNotification extends CordovaPlugin {
                 }
                 else if (action.equals("getUri")) {
                     getUri(command);
+                }
+                else if (action.equals("clearUri")) {
+                    clearUri(command);
                 }
                 else if (action.equals("deviceready")) {
                     deviceready();
@@ -569,10 +572,31 @@ public class LocalNotification extends CordovaPlugin {
     }
 
     private void getUri (CallbackContext command) {
-        Intent i = cordova.getActivity().getIntent();
-        String uri = i.getDataString();
+        /*if (args.length() != 0) {
+            //return new PluginResult(PluginResult.Status.INVALID_ACTION);
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
+            return false;
+        }*/
+
+        /*Intent i = cordova.getActivity().getIntent();
+        String uri = i.getDataString();*/
+
+        String pkgName = cordova.getActivity().getPackageName();
+        SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
+        String s = sharedPref.getString("hotlines", "");
+
         //return new PluginResult(PluginResult.Status.OK, uri);
-        command.sendPluginResult(new PluginResult(PluginResult.Status.OK, uri));
+        command.sendPluginResult(new PluginResult(PluginResult.Status.OK, s));
+    }
+
+    private void clearUri (CallbackContext command) {
+        String pkgName = cordova.getActivity().getPackageName();
+        SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("hotlines", "");
+        Boolean a = editor.commit();
+
+        command.sendPluginResult(new PluginResult(PluginResult.Status.OK, a));
     }
 
     /**

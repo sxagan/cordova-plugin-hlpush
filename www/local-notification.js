@@ -182,8 +182,21 @@ exports.getDeviceInfo = function (callback, scope) {
     this.core.getDeviceInfo(callback, scope);
 };
 
+/*
+cordova.plugins.notification.local.getUri(function(uri){
+    console.log(uri);
+})
+*/
 exports.getUri = function (callback, scope) {
     this.core.getUri(callback, scope);
+};
+/*
+cordova.plugins.notification.local.clearUri(function(cleared){
+    console.log(cleared); //true/false
+})
+*/
+exports.clearUri = function (callback, scope) {
+    this.core.clearUri(callback, scope);
 };
 
 /**
