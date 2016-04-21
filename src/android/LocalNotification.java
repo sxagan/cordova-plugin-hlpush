@@ -163,15 +163,7 @@ public class LocalNotification extends CordovaPlugin {
         isInBackground = false;
         deviceready();
 
-        try{
-            String ref = webView.toString();
-            if(ref.contains("drawer.html")){
-                getCustomScheme("onResume");
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        getCustomScheme("onResume");
 
 
     }
