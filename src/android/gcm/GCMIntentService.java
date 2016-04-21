@@ -105,6 +105,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                     Log.d(LOGTAG, "push notification sound path: "+ sound);
 
                     String icon = appends.optString("icon", "");
+                    Log.d(LOGTAG, "Icon string: "+ icon);
                     try {
                         //String pkg = context.getPackageName();
                         String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
