@@ -94,7 +94,8 @@ public class GCMIntentService extends GCMBaseIntentService {
                             Log.d(LOGTAG, "soundfile path: "+ soundfile.toString());
                             //Log.d(LOGTAG, "soundfile exist: "+ soundfile.exists());
                             String joinedPath = soundfile.toString();
-                            sound = "file://"+joinedPath;
+                            //sound = "file://"+joinedPath;
+                            sound = "file:///android_asset/steroids/build/audio/s01.mp3";
                             appends.putOpt("sound",sound);
                         }
 
