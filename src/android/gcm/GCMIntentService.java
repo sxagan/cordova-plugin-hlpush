@@ -113,6 +113,9 @@ public class GCMIntentService extends GCMBaseIntentService {
                             String joinedPath = new File(ExFilesDir, icon).toString();
                             icon = "file://"+joinedPath;
                             appends.putOpt("icon",icon);
+                            Log.d(LOGTAG, "push notification icon path: "+ icon);
+                        }else{
+                            Log.d(LOGTAG, "push notification icon path: iconpath was empty");
                         }
 
                     } catch (Exception e) {
