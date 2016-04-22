@@ -270,42 +270,47 @@ class AssetUtil {
         //noinspection ResultOfMethodCallIgnored
         new File(storage).mkdir();
 
-        try {
-            URL url = new URL(path);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        if(!file.exists()){
+            try {
+                URL url = new URL(path);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-			StrictMode.ThreadPolicy policy =
-			        new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.ThreadPolicy policy =
+                        new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
-			StrictMode.setThreadPolicy(policy);
+                StrictMode.setThreadPolicy(policy);
 
-            connection.setRequestProperty("Connection", "close");
-            connection.setConnectTimeout(5000);
-			connection.connect();
+                connection.setRequestProperty("Connection", "close");
+                connection.setConnectTimeout(5000);
+                connection.connect();
 
-			InputStream input = connection.getInputStream();
-			FileOutputStream outStream = new FileOutputStream(file);
+                InputStream input = connection.getInputStream();
+                FileOutputStream outStream = new FileOutputStream(file);
 
-			copyFile(input, outStream);
+                copyFile(input, outStream);
 
-			outStream.flush();
-			outStream.close();
+                outStream.flush();
+                outStream.close();
 
-			return Uri.fromFile(file);
+                return Uri.fromFile(file);
 
-		} catch (MalformedURLException e) {
-			Log.e("Asset", "Incorrect URL");
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			Log.e("Asset", "Failed to create new File from HTTP Content");
-			e.printStackTrace();
-		} catch (IOException e) {
-			Log.e("Asset", "No Input can be created from http Stream");
-			e.printStackTrace();
-		}
+            } catch (MalformedURLException e) {
+                Log.e("Asset", "Incorrect URL");
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                Log.e("Asset", "Failed to create new File from HTTP Content");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Asset", "No Input can be created from http Stream");
+                e.printStackTrace();
+            }
+        }else{
+            return Uri.fromFile(file);
+        }
+
 
         return Uri.EMPTY;
-	}
+    }
 
 	/**
 	 * Copy content from input stream into output stream.
