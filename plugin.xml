@@ -129,7 +129,7 @@
 
             <activity
                 android:name="com.datum.hotline.plugin.hlpush.localnotification.ViewActivity"
-                android:launchMode="singleInstance"
+                android:launchMode="singleTask"
                 android:theme="@android:style/Theme.NoDisplay" 
                 android:exported="true" 
                 >
