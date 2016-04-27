@@ -129,9 +129,11 @@
 
             <activity
                 android:name="com.datum.hotline.plugin.hlpush.localnotification.ViewActivity"
-                android:launchMode="singleTask"
+                android:launchMode="singleInstance"
                 android:theme="@android:style/Theme.NoDisplay" 
                 android:exported="true" 
+                android:excludeFromRecents="true" 
+                
                 >
                 <intent-filter>
                     <action android:name="android.intent.action.VIEW" />
@@ -141,7 +143,6 @@
                 </intent-filter>
             </activity>     
             <!-- 
-                android:excludeFromRecents="true" 
              -->           
 
             <receiver
