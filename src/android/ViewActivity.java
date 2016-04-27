@@ -42,11 +42,14 @@ public class ViewActivity extends Activity {
 
         Log.d("ViewActivity","onCreate=>pkgName: "+pkgName);
         Log.d("ViewActivity","onCreate=>data: "+data);
-
-        SharedPreferences sharedPref = getSharedPreferences(pkgName,MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("hotlines", data);
-        editor.commit();
+        if(data != null && !data.isEmpty()){
+            SharedPreferences sharedPref = getSharedPreferences(pkgName,MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("hotlines", data);
+            editor.commit();
+        }else{
+            Log.d("ViewActivity","onCreate=>data is empty ");
+        }
 
         Intent intent = pm.getLaunchIntentForPackage(pkgName);
         //intent.putExtra("hotlines", data);
