@@ -397,7 +397,11 @@ public class LocalNotification extends CordovaPlugin {
                 }
             });
         }else{
-            executePick(action,args,command);
+            this.cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    executePick(action,args,command);
+                }
+            });
         }
 
         return true;
