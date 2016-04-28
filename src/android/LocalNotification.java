@@ -262,13 +262,28 @@ public class LocalNotification extends CordovaPlugin {
         Log.e("lNtfy","execute - mWebViewReferences size: "+ mWebViewReferences.size());
 
         Notification.setDefaultTriggerReceiver(TriggerReceiver.class);
-        if (cordova == null) {
+        if (this.cordova == null) {
             Log.e("lNtfy","execute - instance cordova is null");
             //throw new Error("execute => cordova is null");
         }
 
-        ExecutorService tp = cordova.getThreadPool();
+        ExecutorService tp = this.cordova.getThreadPool();
         if (tp == null) {
+            int count = 0;
+            while(tp == null && count < 5){
+                Log.d("lNtfy","while=>gettting tp "+String.valueOf(count));
+                try {
+                    Thread.sleep(5000);
+                    tp = this.cordova.getThreadPool();
+                    if(tp == null){
+                        Log.d("lNtfy","while=>cordova.getThreadPool() is null");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                count++;
+            }
+
             Log.e("lNtfy","execute - cordova.getThreadPool() is null");
             //throw new Error("execute => cordova.getThreadPool() returned null");
         }
