@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -16,6 +17,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Map;
 import java.util.Set;
 
 import com.datum.hotline.plugin.hlpush.localnotification.TriggerReceiver;
@@ -85,7 +91,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                     }
                     
                     String sound = appends.optString("sound", "");
-                    try {
+                    /*try {
                         //String pkg = context.getPackageName();
                         String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
                         Log.d(LOGTAG, "getExternalFilesDir path: "+ ExFilesDir);
@@ -102,12 +108,25 @@ public class GCMIntentService extends GCMBaseIntentService {
                     } catch (Exception e) {
                         Log.e(LOGTAG, "Error prepend sound name with getExternalFilesDir");
                         e.printStackTrace();
+                    }*/
+                    try {
+                        //String pkg = context.getPackageName();
+                        if(!sound.isEmpty()){
+                            sound = getPathFromAsset(context,sound);
+                            appends.putOpt("sound",sound);
+                        }else{
+                            Log.d(LOGTAG, "push notification sound path: soundpath was empty");
+                        }
+
+                    } catch (Exception e) {
+                        Log.e(LOGTAG, "Error prepend sound name with getExternalFilesDir");
+                        e.printStackTrace();
                     }
                     Log.d(LOGTAG, "push notification sound path: "+ sound);
 
                     String icon = appends.optString("icon", "");
                     Log.d(LOGTAG, "Icon string: "+ icon);
-                    try {
+                    /*try {
                         //String pkg = context.getPackageName();
                         String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
                         //Log.d(LOGTAG, "getExternalFilesDir path: "+ ExFilesDir);
@@ -123,6 +142,19 @@ public class GCMIntentService extends GCMBaseIntentService {
                     } catch (Exception e) {
                         Log.e(LOGTAG, "Error prepend icon name with getExternalFilesDir");
                         e.printStackTrace();
+                    }*/
+                    try {
+                        //String pkg = context.getPackageName();
+                        if(!icon.isEmpty()){
+                            icon = getPathFromAsset(context,icon);
+                            appends.putOpt("icon",icon);
+                        }else{
+                            Log.d(LOGTAG, "push notification icon path: iconpath was empty");
+                        }
+
+                    } catch (Exception e) {
+                        Log.e(LOGTAG, "Error prepend sound name with getExternalFilesDir");
+                        e.printStackTrace();
                     }
                     Log.d(LOGTAG, "push notification icon path: "+ icon);
 
@@ -131,6 +163,56 @@ public class GCMIntentService extends GCMBaseIntentService {
             }
 
             NotificationService.getInstance(context).onMessage(extras);
+        }
+    }
+
+    private String getPathFromAsset(Context context, String path) {
+        File dir = context.getExternalCacheDir();
+
+        if (dir == null) {
+            Log.e("Asset", "Missing external cache dir");
+            return "";
+        }
+        String resPath  = path.replaceFirst("assets://", "");
+        String fileName = resPath.substring(resPath.lastIndexOf('/') + 1);
+        String storage  = dir.toString() + STORAGE_FOLDER;
+        File file       = new File(storage, fileName);
+
+        //noinspection ResultOfMethodCallIgnored
+        new File(storage).mkdir();
+
+        if(!file.exists()){
+            try {
+                AssetManager assets = context.getAssets();
+                FileOutputStream outStream = new FileOutputStream(file);
+                InputStream inputStream = assets.open(resPath);
+
+                copyFile(inputStream, outStream);
+
+                outStream.flush();
+                outStream.close();
+
+                //return Uri.fromFile(file);
+                return "file://"+file.toString();
+
+            } catch (Exception e) {
+                Log.e("Asset", "File not found: assets/" + resPath);
+                e.printStackTrace();
+            }
+        }else{
+            return "file://"+file.toString();
+        }
+
+
+        return "";
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
         }
     }
 
