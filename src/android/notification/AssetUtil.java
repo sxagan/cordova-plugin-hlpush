@@ -118,13 +118,51 @@ class AssetUtil {
 			return getUriFromAsset(path);
 		} else if (path.startsWith("http")){
 			return getUriFromRemote(path);
-		}
+		}else if (path.startsWith("assets://")){
+            return getUriFromAsset2(path);
+        }
 		/*else if (path.startsWith("android.resource")){
 			return Uri.parse(path);
 		}*/
 
 		return Uri.EMPTY;
 	}
+
+    // assets://steroids/build/audio/s01.mp3
+    private Uri getUriFromAsset2(String path) {
+        File dir = context.getExternalCacheDir();
+
+        if (dir == null) {
+            Log.e("Asset", "Missing external cache dir");
+            return Uri.EMPTY;
+        }
+        String resPath  = path.replaceFirst("assets://", "");
+        String fileName = resPath.substring(resPath.lastIndexOf('/') + 1);
+        String storage  = dir.toString() + STORAGE_FOLDER;
+        File file       = new File(storage, fileName);
+
+        //noinspection ResultOfMethodCallIgnored
+        new File(storage).mkdir();
+
+        try {
+            AssetManager assets = context.getAssets();
+            FileOutputStream outStream = new FileOutputStream(file);
+            InputStream inputStream = assets.open(resPath);
+
+            copyFile(inputStream, outStream);
+
+            outStream.flush();
+            outStream.close();
+
+            return Uri.fromFile(file);
+
+        } catch (Exception e) {
+            Log.e("Asset", "File not found: assets/" + resPath);
+            e.printStackTrace();
+        }
+
+        return Uri.EMPTY;
+    }
 
 	/**
 	 * URI for a file.
