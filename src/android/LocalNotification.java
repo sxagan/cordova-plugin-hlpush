@@ -269,7 +269,7 @@ public class LocalNotification extends CordovaPlugin {
 
         ExecutorService tp = this.cordova.getThreadPool();
         if (tp == null) {
-            int count = 0;
+            /*int count = 0;
             while(tp == null && count < 5){
                 Log.d("lNtfy","while=>gettting tp "+String.valueOf(count));
                 try {
@@ -282,7 +282,7 @@ public class LocalNotification extends CordovaPlugin {
                     e.printStackTrace();
                 }
                 count++;
-            }
+            }*/
 
             Log.e("lNtfy","execute - cordova.getThreadPool() is null");
             //throw new Error("execute => cordova.getThreadPool() returned null");
@@ -291,7 +291,7 @@ public class LocalNotification extends CordovaPlugin {
             Log.e("lNtfy","execute - CallbackContext is null");
             //throw new Error("execute => command is null");
         }
-        tp.execute(new Runnable() {
+        /*tp.execute(new Runnable() {
             public void run() {
                 if (action.equals("schedule")) {
                     schedule(args);
@@ -388,10 +388,118 @@ public class LocalNotification extends CordovaPlugin {
                 }
                 
             }
-        });
+        });*/
+
+        if(tp != null){
+            tp.execute(new Runnable() {
+                public void run() {
+                    executePick(action,args,command);
+                }
+            });
+        }else{
+            executePick(action,args,command);
+        }
 
         return true;
     }
+
+    public void executePick(final String action, final JSONArray args,
+                            final CallbackContext command){
+        if (action.equals("schedule")) {
+            schedule(args);
+            command.success();
+        }
+        else if (action.equals("update")) {
+            update(args);
+            command.success();
+        }
+        else if (action.equals("append")) {
+            ///LOG.d("append","appended");
+            append(args);
+            command.success();
+        }
+        else if (action.equals("cancel")) {
+            cancel(args);
+            command.success();
+        }
+        else if (action.equals("cancelAll")) {
+            cancelAll();
+            command.success();
+        }
+        else if (action.equals("clear")) {
+            clear(args);
+            command.success();
+        }
+        else if (action.equals("clearAll")) {
+            clearAll();
+            command.success();
+        }
+        else if (action.equals("getVolStatus")) {
+            getVolStatus(command);
+        }
+        else if (action.equals("getDeviceInfo")) {
+            getDeviceInfo(command);
+        }
+        else if (action.equals("getUri")) {
+            getUri(command);
+        }
+        else if (action.equals("clearUri")) {
+            clearUri(command);
+        }
+        else if (action.equals("isPresent")) {
+            isPresent(args.optInt(0), command);
+        }
+        else if (action.equals("isScheduled")) {
+            isScheduled(args.optInt(0), command);
+        }
+        else if (action.equals("isTriggered")) {
+            isTriggered(args.optInt(0), command);
+        }
+        else if (action.equals("getAllIds")) {
+            getAllIds(command);
+        }
+        else if (action.equals("getScheduledIds")) {
+            getScheduledIds(command);
+        }
+        else if (action.equals("getTriggeredIds")) {
+            getTriggeredIds(command);
+        }
+        else if (action.equals("getSingle")) {
+            getSingle(args, command);
+        }
+        else if (action.equals("getSingleScheduled")) {
+            getSingleScheduled(args, command);
+        }
+        else if (action.equals("getSingleTriggered")) {
+            getSingleTriggered(args, command);
+        }
+        else if (action.equals("getAll")) {
+            getAll(args, command);
+        }
+        else if (action.equals("getScheduled")) {
+            getScheduled(args, command);
+        }
+        else if (action.equals("getTriggered")) {
+            getTriggered(args, command);
+        }
+        else if (action.equals("deviceready")) {
+            deviceready();
+        }
+        else if (action.equals("_init")) {
+            Log.d("lNtfy","_init execute");
+            if(webView != null){
+                Log.d("lNtfy","initialize - referencing static webView");
+                LocalNotification.webView = webView;
+            }
+            if(cordova != null){
+                Log.d("lNtfy","initialize - referencing static cordova");
+                LocalNotification.cordova = cordova;
+            }
+            //JSONObject jb = new JSONObject("{\"ok\": true }");
+            command.sendPluginResult(new PluginResult(PluginResult.Status.OK, "OK"));
+        }
+    }
+
 
     /**
      * Schedule multiple local notifications.
