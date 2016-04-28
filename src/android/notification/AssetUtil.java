@@ -144,21 +144,25 @@ class AssetUtil {
         //noinspection ResultOfMethodCallIgnored
         new File(storage).mkdir();
 
-        try {
-            AssetManager assets = context.getAssets();
-            FileOutputStream outStream = new FileOutputStream(file);
-            InputStream inputStream = assets.open(resPath);
+        if(!file.exists()){
+            try {
+                AssetManager assets = context.getAssets();
+                FileOutputStream outStream = new FileOutputStream(file);
+                InputStream inputStream = assets.open(resPath);
 
-            copyFile(inputStream, outStream);
+                copyFile(inputStream, outStream);
 
-            outStream.flush();
-            outStream.close();
+                outStream.flush();
+                outStream.close();
 
+                return Uri.fromFile(file);
+
+            } catch (Exception e) {
+                Log.e("Asset", "File not found: assets/" + resPath);
+                e.printStackTrace();
+            }
+        }else{
             return Uri.fromFile(file);
-
-        } catch (Exception e) {
-            Log.e("Asset", "File not found: assets/" + resPath);
-            e.printStackTrace();
         }
 
         return Uri.EMPTY;
