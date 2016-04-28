@@ -35,6 +35,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     private static String LOGTAG = "LN-GCMIntentService";
     static final String TAG = "HotlineNotifications";
+    private static final String STORAGE_FOLDER = "/localnotification";
 
     //public static final String MESSAGE = "message";
     public static final String MESSAGE = "msg";
