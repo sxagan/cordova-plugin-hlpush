@@ -127,6 +127,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 
                     String icon = appends.optString("icon", "");
                     Log.d(LOGTAG, "Icon string: "+ icon);
+                    if(icon == ""){
+                        icon = "assets://steroids/build/icons/icon.png";
+                    }
                     /*try {
                         //String pkg = context.getPackageName();
                         String ExFilesDir = context.getExternalFilesDir(null).getAbsolutePath();
