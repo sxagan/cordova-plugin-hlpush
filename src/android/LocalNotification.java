@@ -461,6 +461,9 @@ public class LocalNotification extends CordovaPlugin {
         else if (action.equals("setBadge")) {
             setBadge(args,command);
         }
+        else if (action.equals("incBadge")) {
+            incBadge(command);
+        }
         else if (action.equals("checkBadge")) {
             checkBadge(command);
         }
@@ -747,7 +750,8 @@ public class LocalNotification extends CordovaPlugin {
     private void setBadge (JSONArray args, CallbackContext command){
         int badge = args.optInt(0);
         boolean success;
-        Context context = cordova.getActivity().getApplication().getApplicationContext();
+        //Context context = cordova.getActivity().getApplication().getApplicationContext();
+        Context context = cordova.getActivity();
         String pkgName = cordova.getActivity().getPackageName();
         SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -759,6 +763,23 @@ public class LocalNotification extends CordovaPlugin {
         editor.putInt("hotlinesBadge", badge);
         Boolean a = editor.commit();
         command.sendPluginResult(new PluginResult(PluginResult.Status.OK, success));
+    }
+    private void incBadge (CallbackContext command){
+        boolean success = doIncrementBadge();
+        command.sendPluginResult(new PluginResult(PluginResult.Status.OK, success));
+    }
+    public static boolean incBadge (){
+        return doIncrementBadge();
+    }
+    private static boolean doIncrementBadge(){
+        String pkgName = cordova.getActivity().getPackageName();
+        SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
+        int badge = sharedPref.getInt("hotlinesBadge",0);
+        badge++;
+        Context context = cordova.getActivity();
+        boolean success = ShortcutBadger.applyCount(context, badge);
+
+        return success;
     }
     private void checkBadge (CallbackContext command){
         String pkgName = cordova.getActivity().getPackageName();

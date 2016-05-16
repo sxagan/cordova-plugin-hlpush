@@ -216,6 +216,9 @@ exports.clearUri = function (callback, scope) {
 exports.setBadge = function (badge, callback, scope) {
     this.exec('setBadge',badge || 0, callback, scope);
 };
+exports.incBadge = function ( callback, scope) {
+    this.exec('incBadge',0, callback, scope);
+};
 exports.checkBadge = function (callback, scope) {
     this.exec('checkBadge', 0, callback, scope);
 };

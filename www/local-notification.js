@@ -209,6 +209,15 @@ exports.setBadge = function (badge,callback, scope) {
 };
 
 /*
+cordova.plugins.notification.local.incBadge(function(success){
+    console.log("Badge increment=>success: ",success);
+})
+*/
+exports.incBadge = function (callback, scope) {
+    this.core.incBadge(callback, scope);
+};
+
+/*
 cordova.plugins.notification.local.checkBadge(function(badge){
     console.log("Badge Count", badge);
 })
