@@ -164,7 +164,8 @@ public class GCMIntentService extends GCMBaseIntentService {
                     Log.d(LOGTAG, "push notification icon path: "+ icon);
 
                     try{
-                        boolean success = LocalNotification.incBadge();
+                        Context baseContext = getBaseContext();
+                        boolean success = LocalNotification.incBadge(baseContext);
                         Log.d(LOGTAG, "push notification=>increment badge:"+ Boolean.valueOf(success).toString());
                     }catch (Exception e){
                         Log.e(LOGTAG, "push notification=>increment=>error");

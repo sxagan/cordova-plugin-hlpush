@@ -765,18 +765,23 @@ public class LocalNotification extends CordovaPlugin {
         command.sendPluginResult(new PluginResult(PluginResult.Status.OK, success));
     }
     private void incBadge (CallbackContext command){
-        boolean success = doIncrementBadge();
+        boolean success = doIncrementBadge(null);
         command.sendPluginResult(new PluginResult(PluginResult.Status.OK, success));
     }
-    public static boolean incBadge (){
-        return doIncrementBadge();
+    public static boolean incBadge (Context ctx){
+        return doIncrementBadge(ctx);
     }
-    private static boolean doIncrementBadge(){
+    private static boolean doIncrementBadge(Context ctx){
         String pkgName = cordova.getActivity().getPackageName();
         SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
         int badge = sharedPref.getInt("hotlinesBadge",0);
         badge++;
-        Context context = cordova.getActivity();
+        Context context;
+        if(ctx != null){
+            context = ctx;
+        }else{
+            context = cordova.getActivity();
+        }
         boolean success = ShortcutBadger.applyCount(context, badge);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("hotlinesBadge", badge);
