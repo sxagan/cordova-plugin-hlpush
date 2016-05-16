@@ -778,7 +778,9 @@ public class LocalNotification extends CordovaPlugin {
         badge++;
         Context context = cordova.getActivity();
         boolean success = ShortcutBadger.applyCount(context, badge);
-
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("hotlinesBadge", badge);
+        Boolean a = editor.commit();
         return success;
     }
     private void checkBadge (CallbackContext command){
