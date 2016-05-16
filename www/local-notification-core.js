@@ -213,6 +213,12 @@ exports.getUri = function (callback, scope) {
 exports.clearUri = function (callback, scope) {
     this.exec('clearUri', 0, callback, scope);
 };
+exports.setBadge = function (badge, callback, scope) {
+    this.exec('setBadge',badge || 0, callback, scope);
+};
+exports.checkBadge = function (callback, scope) {
+    this.exec('checkBadge', 0, callback, scope);
+};
 
 /**
  * Check if a notification with an ID is scheduled.

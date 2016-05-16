@@ -52,6 +52,11 @@ import java.util.concurrent.*;
 import com.datum.hotline.plugin.hlpush.notification.Manager;
 import com.datum.hotline.plugin.hlpush.notification.Notification;
 
+//badge
+import me.leolin.shortcutbadger.ShortcutBadger;
+import me.leolin.shortcutbadger.impl.ApexHomeBadger;
+//end badge
+
 /**
  * This plugin utilizes the Android AlarmManager in combination with local
  * notifications. When a local notification is scheduled the alarm manager takes
@@ -444,12 +449,22 @@ public class LocalNotification extends CordovaPlugin {
         else if (action.equals("getDeviceInfo")) {
             getDeviceInfo(command);
         }
+        //get custom scheme uri
         else if (action.equals("getUri")) {
             getUri(command);
         }
         else if (action.equals("clearUri")) {
             clearUri(command);
         }
+        // end get custom scheme uri
+        //badge
+        else if (action.equals("setBadge")) {
+            setBadge(args,command);
+        }
+        else if (action.equals("checkBadge")) {
+            checkBadge(command);
+        }
+        //end badge
         else if (action.equals("isPresent")) {
             isPresent(args.optInt(0), command);
         }
@@ -726,6 +741,34 @@ public class LocalNotification extends CordovaPlugin {
 
         command.sendPluginResult(new PluginResult(PluginResult.Status.OK, a));
     }
+
+    //badge
+
+    private void setBadge (JSONArray args, CallbackContext command){
+        int badge = args.optInt(0);
+        boolean success;
+        Context context = cordova.getActivity().getApplication().getApplicationContext();
+        String pkgName = cordova.getActivity().getPackageName();
+        SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if(badge > 0){
+            success = ShortcutBadger.applyCount(context, badge);
+        }else{
+            success = ShortcutBadger.removeCount(context);
+        }
+        editor.putInt("hotlinesBadge", badge);
+        Boolean a = editor.commit();
+        command.sendPluginResult(new PluginResult(PluginResult.Status.OK, success));
+    }
+    private void checkBadge (CallbackContext command){
+        String pkgName = cordova.getActivity().getPackageName();
+        SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
+        int badge = sharedPref.getInt("hotlinesBadge",0);
+        command.sendPluginResult(new PluginResult(PluginResult.Status.OK, badge));
+        //return 0;
+    }
+
+    //end badge
 
     /**
      * If a notification with an ID is scheduled.

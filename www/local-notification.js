@@ -199,6 +199,24 @@ exports.clearUri = function (callback, scope) {
     this.core.clearUri(callback, scope);
 };
 
+/*
+cordova.plugins.notification.local.setBadge(2,function(success){
+    console.log("Badge Set=>success: ",success);
+})
+*/
+exports.setBadge = function (badge,callback, scope) {
+    this.core.setBadge(badge,callback, scope);
+};
+
+/*
+cordova.plugins.notification.local.checkBadge(function(badge){
+    console.log("Badge Count", badge);
+})
+*/
+exports.checkBadge = function (callback, scope) {
+    this.core.checkBadge(callback, scope);
+};
+
 /**
  * Check if a notification with an ID is scheduled.
  *
