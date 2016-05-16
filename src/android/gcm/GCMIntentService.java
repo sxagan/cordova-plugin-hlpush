@@ -26,6 +26,7 @@ import java.util.Set;
 
 import com.datum.hotline.plugin.hlpush.localnotification.TriggerReceiver;
 import com.datum.hotline.plugin.hlpush.notification.Manager;
+import com.datum.hotline.plugin.hlpush.localnotification.LocalNotification;
 
 @SuppressLint("NewApi")
 public class GCMIntentService extends GCMBaseIntentService {
@@ -161,6 +162,14 @@ public class GCMIntentService extends GCMBaseIntentService {
                         e.printStackTrace();
                     }
                     Log.d(LOGTAG, "push notification icon path: "+ icon);
+
+                    try{
+                        boolean success = LocalNotification.incBadge();
+                        Log.d(LOGTAG, "push notification=>increment badge:"+ Boolean.valueOf(success).toString());
+                    }catch (Exception e){
+                        Log.e(LOGTAG, "push notification=>increment=>error");
+                        e.printStackTrace();
+                    }
 
                     Manager.getInstance(context).append(1, appends,TriggerReceiver.class);
                 }
