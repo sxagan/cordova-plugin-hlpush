@@ -26,12 +26,14 @@ package com.datum.hotline.plugin.hlpush.notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.media.RingtoneManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -118,6 +120,17 @@ public class Builder {
     public Builder setClickActivity(Class<?> activity) {
         this.clickActivity = activity;
         return this;
+    }
+
+    public String getAppLabel() {
+        PackageManager packageManager = context.getPackageManager();
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(context.getApplicationInfo().packageName, 0);
+        } catch (final PackageManager.NameNotFoundException e) {
+            Log.e("lNtfy", "getAppLable=>Error NameNotFoundException ");
+        }
+        return (String) (applicationInfo != null ? packageManager.getApplicationLabel(applicationInfo) : "Unknown");
     }
 
     /**
@@ -228,7 +241,8 @@ public class Builder {
         if(badge > 1){
             try {
                 JSONObject dat = new JSONObject(optionsjson.optString("data"));
-                BTS_BigTitle = "HotLines";
+                //BTS_BigTitle = "HotLine";
+                BTS_BigTitle = getAppLabel();
                 String msg = "";
                 for(int i = 0 ; i < dataArray.length(); i++){
                     JSONObject obj = new JSONObject(dataArray.getString(i));
