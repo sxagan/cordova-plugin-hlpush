@@ -828,9 +828,9 @@ public class LocalNotification extends CordovaPlugin {
     /*
     *  "{"data":{"json":{"postid":"c04d2ce8-48c2-4d4d-87a5-8c785a761c56","type":"replies"},"sender":"Dev acc @ Talking dogs please ","msg":"New","ts":"2016-05-26T08:46:05.260Z","sendericon":""},"icon":"assets://steroids/build/icons/icon.png","smallIcon":"app_icon","sound":"assets://steroids/build/audio/s03.mp3","soundname":null}"
     * */
-    public static boolean doPushEcho(Context ctx, String payload){
+    public static boolean doPushEcho(Context ctx, String echopayload){
         Context context;
-        Log.d(TAG, "doPushEcho=>payload: " + (echopayload != null ? echopayload : "No payload given") );
+        Log.d(TAG, "doPushEcho=>echopayload: " + (echopayload != null ? echopayload : "No payload given") );
         if(ctx != null){
             context = ctx;
             Log.d(TAG, "doPushEcho=>context: " + "using param ctx");
