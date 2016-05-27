@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
@@ -44,7 +45,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -468,6 +476,9 @@ public class LocalNotification extends CordovaPlugin {
             checkBadge(command);
         }
         //end badge
+        else if (action.equals("registerPushEcho")) {
+            registerPushEcho(args,command);
+        }
         else if (action.equals("isPresent")) {
             isPresent(args.optInt(0), command);
         }
@@ -797,6 +808,104 @@ public class LocalNotification extends CordovaPlugin {
     }
 
     //end badge
+
+    private void registerPushEcho (JSONArray args, CallbackContext command){
+        String url = args.optString(0);
+        Log.d(TAG, "registerPushEcho=>url: " + url);
+        Context context = cordova.getActivity();
+        String pkgName = context.getPackageName();
+        Log.d(TAG, "registerPushEcho=>pkgName: " + pkgName);
+        SharedPreferences sharedPref = context.getSharedPreferences(pkgName,context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putString("pushEchoUrl", url);
+        Boolean success = editor.commit();
+        Log.d(TAG, "registerPushEcho=>success: " + Boolean.toString(success));
+        doPushEcho(null, null);
+        command.sendPluginResult(new PluginResult(PluginResult.Status.OK, success));
+    }
+
+    /*
+    *  "{"data":{"json":{"postid":"c04d2ce8-48c2-4d4d-87a5-8c785a761c56","type":"replies"},"sender":"Dev acc @ Talking dogs please ","msg":"New","ts":"2016-05-26T08:46:05.260Z","sendericon":""},"icon":"assets://steroids/build/icons/icon.png","smallIcon":"app_icon","sound":"assets://steroids/build/audio/s03.mp3","soundname":null}"
+    * */
+    public static boolean doPushEcho(Context ctx, String payload){
+        Context context;
+        Log.d(TAG, "doPushEcho=>payload: " + (echopayload != null ? echopayload : "No payload given") );
+        if(ctx != null){
+            context = ctx;
+            Log.d(TAG, "doPushEcho=>context: " + "using param ctx");
+        }else{
+            context = cordova.getActivity();
+            Log.d(TAG, "doPushEcho=>context: " + "using cordova activity context");
+        }
+        String pkgName = context.getPackageName();
+        Log.d(TAG, "doPushEcho=>pkgName: " + pkgName);
+        SharedPreferences sharedPref = context.getSharedPreferences(pkgName,context.MODE_PRIVATE);
+        String url =  sharedPref.getString("pushEchoUrl","");
+        if(echopayload != null){
+            String upayload = "";
+            try {
+                upayload = URLEncoder.encode(echopayload, "utf-8");
+                Log.d(TAG, "doPushEcho=>upayload(UrlEncoded): " + upayload);
+            } catch (UnsupportedEncodingException e) {
+                Log.e(TAG, "doPushEcho=>UrlEncoding=>Error: " + e.getMessage());
+                e.printStackTrace();
+            }
+            url = url + "?p=" + upayload;
+            Log.d(TAG, "doPushEcho=>full url: " + url);
+        }
+        /*try {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpResponse response = null;
+            response = httpclient.execute(new HttpGet(url));
+            StatusLine statusLine = response.getStatusLine();
+            if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+
+                return true;
+            } else{
+                return false;
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        HttpURLConnection connection = null;
+        boolean success = false;
+        try {
+            URL urla = new URL(url);
+            connection = (HttpURLConnection) urla.openConnection();
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Connection", "close");
+            connection.setConnectTimeout(5000);
+            connection.connect();
+            int code = connection.getResponseCode();
+
+            if(code == HttpURLConnection.HTTP_OK){
+                //connection.disconnect();
+                Log.d(TAG, "doPushEcho=>connection=>responsecode: " + Integer.toString(code));
+                success = true;
+            }
+
+        }
+        catch (MalformedURLException e) {
+            Log.e("Asset", "Incorrect URL");
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            Log.e("Asset", "Failed to create new File from HTTP Content");
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("Asset", "No Input can be created from http Stream");
+            e.printStackTrace();
+        }finally{
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+
+        return success;
+    }
 
     /**
      * If a notification with an ID is scheduled.

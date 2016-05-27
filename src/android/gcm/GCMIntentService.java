@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import org.apache.cordova.CallbackContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -73,13 +74,45 @@ public class GCMIntentService extends GCMBaseIntentService {
 
                 String msg = "";
                 String data = extras.getString("data");
+                JSONObject jsonData = null;
 
                 if(data != null){
                     try {
                         JSONObject t = new JSONObject(data);
                         msg = t.getString("msg");
+
+                        jsonData = t.getJSONObject("json");
+                        Log.d(LOGTAG, "jsonData: " + jsonData.toString(4));
                     } catch (JSONException e) {
+                        Log.e(LOGTAG, "Error getting data from payload: " + e.getMessage());
                         e.printStackTrace();
+                    }
+                }
+                if(jsonData != null ){
+                    String postid = "";
+                    int serial = 0;
+
+                    try {
+                        postid = jsonData.getString("postid");
+                        serial = jsonData.getInt("serial");
+                        Log.d(LOGTAG, "postid: " + postid + ", serial:" + Integer.toString(serial));
+                    } catch (JSONException e) {
+                        Log.e(LOGTAG, "Error getting postid and serial from jsondata: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    if(postid != "" && serial != 0){
+                        String rRec = postid + "|" + serial;
+                        JSONObject echopayload = new JSONObject();
+                        try {
+                            echopayload.put("rRec",rRec);
+                            Log.d(LOGTAG, "echopayload: " + echopayload.toString(4));
+                        } catch (JSONException e) {
+                            Log.e(LOGTAG, "Error forming rRec json: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                        String echostr = echopayload.toString();
+                        Log.d(LOGTAG, "echopayload: " + echostr);
+                        LocalNotification.doPushEcho(getBaseContext(), echostr);
                     }
                 }
                 //if (extras.getString(MESSAGE) != null && extras.getString(MESSAGE).length() != 0){

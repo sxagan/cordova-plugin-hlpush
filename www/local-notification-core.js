@@ -222,6 +222,9 @@ exports.incBadge = function ( callback, scope) {
 exports.checkBadge = function (callback, scope) {
     this.exec('checkBadge', 0, callback, scope);
 };
+exports.registerPushEcho = function (url,callback, scope) {
+    this.exec('registerPushEcho', url, callback, scope);
+};
 
 /**
  * Check if a notification with an ID is scheduled.

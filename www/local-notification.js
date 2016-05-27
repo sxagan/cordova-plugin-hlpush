@@ -226,6 +226,16 @@ exports.checkBadge = function (callback, scope) {
     this.core.checkBadge(callback, scope);
 };
 
+/*
+//http://hogtlines.co/echo/{userid}
+cordova.plugins.notification.local.registerPushEcho("http://hogtlines.co/echo/233-333-rgdfe-4r23",function(success){
+    console.log("success", success);
+})
+*/
+exports.registerPushEcho = function (url,callback, scope) {
+    this.core.registerPushEcho(url,callback, scope);
+};
+
 /**
  * Check if a notification with an ID is scheduled.
  *
