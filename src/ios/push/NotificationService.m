@@ -167,6 +167,16 @@ static NotificationService *instance;
 -(void) receivedNotification:(NSDictionary*)notification{
     NSLog(@"receivedNotification() -> %@", notification);
 
+    /*if (userInfo) {
+        NSLog(@"%@",userInfo);
+
+        if ([userInfo objectForKey:@"aps"]) { 
+            if([[userInfo objectForKey:@"aps"] objectForKey:@"badgecount"]) {
+                [UIApplication sharedApplication].applicationIconBadgeNumber = [[[userInfo objectForKey:@"aps"] objectForKey: @"badgecount"] intValue];
+            }
+        }
+    }*/
+
     [listOfNotifications addObject:notification];
     [self sendNotificationToAllWebViews];
 }

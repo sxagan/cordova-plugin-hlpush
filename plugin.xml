@@ -53,6 +53,10 @@
         <clobbers target="PushNotification" />
     </js-module>
 
+    <js-module src="www/BackgroundJS.js" name="BackgroundJS">
+        <clobbers target="window.plugin.backgroundjs" />
+    </js-module>
+
     <!-- ios -->
     <platform name="ios">
 
@@ -63,6 +67,9 @@
             </feature>
             <feature name="PushPlugin">
                 <param name="ios-package" value="PushPlugin"/>
+            </feature>
+            <feature name="BackgroundJS">
+                <param name="ios-package" value="BackgroundJS"/>
             </feature>
         </config-file>
 
@@ -87,6 +94,10 @@
 
         <header-file src="src/ios/push/PushPlugin.h" />
         <source-file src="src/ios/push/PushPlugin.m" />
+
+        <!-- Backgroundjs -->
+        <header-file src="src/ios/bgjs/BackgroundJS.h"/>
+        <source-file src="src/ios/bgjs/BackgroundJS.m"/>
 
         <!-- local notification hooks-->
         <hook
