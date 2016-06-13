@@ -253,7 +253,7 @@ public class Builder {
                     if(addMSg.length() > 32){
                         addMSg = addMSg.substring(0,30) + " ...";
                     }
-                    msg = msg + obj.optString("sender") + ": "+ addMSg;
+                    msg = msg + obj.optString("sender").trim() + ": "+ addMSg;
                 }
                 BTS_BigText = msg;
                 BTS_SummaryText = String.format("%1d new messages", badge);
