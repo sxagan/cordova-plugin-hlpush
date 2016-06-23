@@ -150,23 +150,99 @@ public class Manager {
      * @param receiver
      *      Receiver to handle the trigger event
      */
-    public Notification append (int id, JSONObject appends, Class<?> receiver) {
+    public Notification append (int id, JSONObject appends,Context ctx, Class<?> receiver) {
         Notification notification = get(id);
 
+        String pkgName = ctx.getPackageName();
+        SharedPreferences sharedPref = ctx.getSharedPreferences(pkgName,ctx.MODE_PRIVATE);
+
+
         if (notification == null){
-            return schedule(appends, receiver);
+            /*SharedPreferences.Editor editor1 = sharedPref.edit();
+            editor1.putString("push", "");
+            Boolean as = editor1.commit();*/
+
+            JSONArray arr = new JSONArray();
+            String s = sharedPref.getString("push", "");
+            if(s.length() > 0){
+                try {
+                    arr = new JSONArray(s);
+                } catch (JSONException e) { e.printStackTrace(); }
+            }
+
+            JSONObject adata = null;
+            try {
+                adata = new JSONObject((String) appends.opt("data"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String msg = (String) adata.opt("msg");
+            if(msg.length() == 0){
+                arr.put(adata);
+                String arrStr = arr.toString();
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("push", arrStr);
+                Boolean a = editor.commit();
+                return null;
+            }else{
+                JSONArray dataArray = new JSONArray();
+                if(arr.length() >0){
+                    for (int i = 0; i < arr.length(); i++){
+                        JSONObject rs = null;
+                        try {
+                            rs = (JSONObject) arr.get(i);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        dataArray.put(rs.toString());
+                    }
+                    try {
+                        appends.putOpt("dataArray", dataArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("push", "");
+                    Boolean a = editor.commit();
+                }
+                return schedule(appends, receiver);
+            }
         }else{
+            /*String s = sharedPref.getString("push", "bbb");
+            Log.d("lNtfy-append", "sharepref data: "+ s);*/
+            JSONArray dataArray = new JSONArray();
+            String s = sharedPref.getString("push", "");
+            if(s.length() > 0){
+                try {
+                    JSONArray tarr = new JSONArray(s);
+                    for (int i = 0; i < tarr.length(); i++){
+                        JSONObject rs = (JSONObject) tarr.get(i);
+                        dataArray.put(rs.toString());
+                    }
+                    //dataArray = concatArray(dataArray,tarr);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("push", "");
+            Boolean a = editor.commit();
+
             JSONObject oldOptObj = notification.getOptions().getDict();
             Options oldOptions = new Options(context).parse(oldOptObj);
             String oldtext = oldOptions.getText();
 
             Log.d("lNtfy-append", "insert to dataArray");
-            JSONArray dataArray;
             if (oldOptObj.has("dataArray")) {
-                dataArray = oldOptObj.optJSONArray("dataArray");
+                //dataArray = oldOptObj.optJSONArray("dataArray");
+                try {
+                    dataArray = concatArray(dataArray,oldOptObj.optJSONArray("dataArray"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
             else {
-                dataArray = new JSONArray();
+                //dataArray = new JSONArray();
                 dataArray.put(oldOptObj.opt("data"));
             }
 
@@ -200,6 +276,17 @@ public class Manager {
         }
 
 
+    }
+
+    private JSONArray concatArray(JSONArray... arrs)
+            throws JSONException {
+        JSONArray result = new JSONArray();
+        for (JSONArray arr : arrs) {
+            for (int i = 0; i < arr.length(); i++) {
+                result.put(arr.get(i));
+            }
+        }
+        return result;
     }
 
     /**

@@ -246,14 +246,18 @@ public class Builder {
                 String msg = "";
                 for(int i = 0 ; i < dataArray.length(); i++){
                     JSONObject obj = new JSONObject(dataArray.getString(i));
-                    if(msg.length() > 0){
+                    String addMSg = obj.optString("msg");
+                    if(msg.length() > 0 && addMSg.length() > 0){
                         msg = msg + "\r\n";
                     }
-                    String addMSg = obj.optString("msg");
-                    if(addMSg.length() > 32){
-                        addMSg = addMSg.substring(0,30) + " ...";
+                    if(addMSg.length() > 0){
+                        if(addMSg.length() > 32){
+                            addMSg = addMSg.substring(0,30) + " ...";
+                        }
+                        msg = msg + obj.optString("sender").trim() + ": "+ addMSg;
+                    }else{
+                        badge--;
                     }
-                    msg = msg + obj.optString("sender").trim() + ": "+ addMSg;
                 }
                 BTS_BigText = msg;
                 BTS_SummaryText = String.format("%1d new messages", badge);

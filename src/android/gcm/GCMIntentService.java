@@ -205,7 +205,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                         e.printStackTrace();
                     }
 
-                    Manager.getInstance(context).append(1, appends,TriggerReceiver.class);
+                    Manager.getInstance(context).append(1, appends,context,TriggerReceiver.class);
                 }
             }
 

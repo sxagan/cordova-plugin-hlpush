@@ -578,6 +578,7 @@ public class LocalNotification extends CordovaPlugin {
      *      Notification properties including their IDs
      */
     private void append (JSONArray appends) {
+        Context ctx = this.cordova.getActivity().getApplicationContext();
         for (int i = 0; i < appends.length(); i++) {
             JSONObject append = appends.optJSONObject(i);
             int id = append.optInt("id", 0);
@@ -605,7 +606,7 @@ public class LocalNotification extends CordovaPlugin {
             }*/
 
             Notification notification =
-                    getNotificationMgr().append(id, append, TriggerReceiver.class);
+                    getNotificationMgr().append(id, append,ctx, TriggerReceiver.class);
 
             fireEvent("append", notification);
         }
