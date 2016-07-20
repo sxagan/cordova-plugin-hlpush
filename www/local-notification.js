@@ -168,6 +168,17 @@ exports.isPresent = function (id, callback, scope) {
     this.core.isPresent(id, callback, scope);
 };
 
+exports.isTappedNotification = function (callback, scope) {
+    this.core.isTappedNotification( callback, scope);
+};
+/*
+
+cordova.plugins.notification.local.isTappedNotification(function(result){
+    console.log("Result",result)//true or false
+})
+
+*/
+
 exports.getVolStatus = function (callback, scope) {
     this.core.getVolStatus(callback, scope);
 };

@@ -483,6 +483,9 @@ public class LocalNotification extends CordovaPlugin {
         else if (action.equals("isPresent")) {
             isPresent(args.optInt(0), command);
         }
+        else if (action.equals("isTappedNotification")) {
+            isTappedNotification(command);
+        }
         else if (action.equals("isScheduled")) {
             isScheduled(args.optInt(0), command);
         }
@@ -681,6 +684,24 @@ public class LocalNotification extends CordovaPlugin {
                 PluginResult.Status.OK, exist);
 
         command.sendPluginResult(result);
+    }
+
+    /**
+     * If a notification is tapped.
+     *
+     * @param command
+     *      The callback context used when calling back into JavaScript.
+     */
+    private void isTappedNotification(CallbackContext command){
+        String pkgName = cordova.getActivity().getPackageName();
+        SharedPreferences sharedPref = cordova.getActivity().getSharedPreferences(pkgName,cordova.getActivity().MODE_PRIVATE);
+        Boolean s = sharedPref.getBoolean("isTappedNotification", false);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("isTappedNotification", false);
+        Boolean a = editor.commit();
+
+        command.sendPluginResult(new PluginResult(PluginResult.Status.OK, s));
     }
 
     /**

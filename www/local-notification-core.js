@@ -199,6 +199,9 @@ exports.cancelAll = function (callback, scope) {
 exports.isPresent = function (id, callback, scope) {
     this.exec('isPresent', id || 0, callback, scope);
 };
+exports.isTappedNotification = function (callback, scope) {
+    this.exec('isTappedNotification', 0, callback, scope);
+};
 
 exports.getVolStatus = function (callback, scope) {
     this.exec('getVolStatus', 0, callback, scope);

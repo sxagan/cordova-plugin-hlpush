@@ -23,6 +23,9 @@
 
 package com.datum.hotline.plugin.hlpush.localnotification;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.datum.hotline.plugin.hlpush.notification.Builder;
 import com.datum.hotline.plugin.hlpush.notification.Notification;
 import com.datum.hotline.plugin.hlpush.notification.TriggerReceiver;
@@ -43,6 +46,14 @@ public class ClickActivity extends com.datum.hotline.plugin.hlpush.notification.
     @Override
     public void onClick(Notification notification) {
         LocalNotification.fireEvent("click", notification);
+
+        Context context = this.getBaseContext();
+        String pkgName = context.getPackageName();
+        SharedPreferences sharedPref = context.getSharedPreferences(pkgName,context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putBoolean("isTappedNotification", true);
+        Boolean a = editor.commit();
 
         if (!notification.getOptions().isOngoing()) {
             String event = notification.isRepeating() ? "clear" : "cancel";
